@@ -1,0 +1,16 @@
+
+h1 {
+    color: red;
+}
+
+.question-text {
+    color: #6c757d;
+}
+
+.toast {
+    max-width: 900px;
+}
+
+.toast-body span {
+    cursor : pointer;
+}

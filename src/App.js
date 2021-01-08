@@ -10,6 +10,7 @@ import {
   Link
   // etc.
 } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Application from './containers/index.jsx';
 
 // import reducer from './reducers/initial.js';

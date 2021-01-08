@@ -1,0 +1,30 @@
+a:link {
+    color: gray;
+}
+a:visited {
+    color: green;
+}
+a:hover {
+    color: rebeccapurple;
+}
+a:active {
+    color: teal;
+}
+
+h2 {
+    color: red;
+}
+
+.toast-body span {
+    line-height: 1em;
+    margin-top: 15px;
+}
+
+span.flag {
+    margin :15px 0px;
+    font-size: 87px;
+    display: inline-block;
+    /*font-size: 90px;*/
+    border: 3px dotted transparent;
+}
+

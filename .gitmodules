@@ -1,0 +1,4 @@
+[submodule "docker/flags-api"]
+	path = docker/flags-api
+	url = git@github.com:mainstreamer/flags-api.git
+	branch = dev-env

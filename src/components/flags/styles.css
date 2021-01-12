@@ -14,3 +14,23 @@ h1 {
 .toast-body span {
     cursor : pointer;
 }
+
+.toast-body {
+    padding-left : 0;
+    padding-right : 0;
+    padding-top: 0;
+}
+
+div.container-fluid {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+}
+div.col-12 {
+    max-width: 100%;
+    padding: 0;
+}
+
+div.row {
+    margin: 0;
+}

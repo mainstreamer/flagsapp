@@ -1,14 +1,12 @@
 import { combineReducers } from 'redux';
-// import axios from 'axios';
 import axios from '../config/Axios';
-const { Map } = require('immutable');
 
+const { Map } = require('immutable');
 
 const getInitialState = () =>
     new Map({
         counter : 0
     });
-
 
 const substract = (state, action) =>
     state.withMutations(newState => {
@@ -19,26 +17,17 @@ const substract = (state, action) =>
 
 const add = (state) => {
     return {
+        ...state,
         'counter' : state.counter || 0,
-        'text' : state.text,
-        'flags' : state.flags,
-        'ques' : state.ques,
-        'answer' : state.answer,
-        'answerCode' : state.answerCode,
-        'lifes' : state.lifes,
-        'lifesIcon' : state.lifesIcon,
-        'timer' : state.timer,
-        'interval' : state.interval,
-        'maxTimer' : state.maxTimer,
     }
 }
-
 
 const reset = (state) => {
     return {
         'counter' : 0,
         'text' : state.ques,
         'flags' : state.flags,
+        'flagi' : state.flagi,
         'ques' : state.ques,
         'answer' : state.answer,
         'answerCode' : state.answerCode,
@@ -48,26 +37,17 @@ const reset = (state) => {
         'timer' : state.maxTimer,
         'interval' : state.interval,
         'maxTimer' : state.maxTimer,
-};
+        'sessionTimer' : 0,
+    }
 }
 
 const correct = (state) => {
     return {
-        'counter' : ++state.counter,
-        // 'text' : state.text+' CORRECT!!!',
-        'text' : "✅ THAT'S RIGHT!",
-        'flags' : state.flags,
-        'ques' : state.ques,
-        'answer' : state.answer,
-        'answerCode' : state.answerCode,
-        'token' : state.token,
-        'lifes' : state.lifes,
-        'lifesIcon' : state.lifesIcon,
-        'timer' : state.timer,
-        'interval' : state.interval,
-        'maxTimer' : state.maxTimer,
+        ...state,
+        counter: ++state.counter,
+        text: "✅ THAT'S RIGHT!",
     }
-}
+};
 
 const incorrect = (state) => {
     return {
@@ -75,6 +55,7 @@ const incorrect = (state) => {
         // 'text' : state.text+ ' INCORRECT :( ',
         'text' : '❌ NO ',
         'flags' : state.flags,
+        'flagi' : state.flagi,
         'ques' : state.ques,
         'answer' : state.answer,
         'answerCode' : state.answerCode,
@@ -84,63 +65,42 @@ const incorrect = (state) => {
         'timer' : state.maxTimer,
         'interval' : state.interval,
         'maxTimer' : state.maxTimer,
+        'sessionTimer' : state.sessionTimer,
     }
 }
 
 const set = (state, action) => {
     return action.payload;
 
-    return {
-        'counter' : state.counter,
-        'text' : state.ques+ ' INCORRECT :( ',
-        'flags' : state.flags,
-        'ques' : state.ques,
-        'answer' : state.answer,
-        'answerCode' : state.answerCode,
-        'token' : action.payload.token,
-        'lifes' : state.lifes,
-        'lifesIcon' : state.lifesIcon,
-        'timer' : state.timer,
-        'interval' : state.interval,
-        'maxTimer' : state.maxTimer,
-    };
+    // return {
+    //     'counter' : state.counter,
+    //     'text' : state.ques+ ' INCORRECT :( ',
+    //     'flags' : state.flags,
+    //     'ques' : state.ques,
+    //     'answer' : state.answer,
+    //     'answerCode' : state.answerCode,
+    //     'token' : action.payload.token,
+    //     'lifes' : state.lifes,
+    //     'lifesIcon' : state.lifesIcon,
+    //     'timer' : state.timer,
+    //     'interval' : state.interval,
+    //     'maxTimer' : state.maxTimer,
+    //     'sessionTimer' : state.sessionTimer,
+    // };
 }
-
-const auth = (state, payload) => {
-
-    return {
-        'counter' : state.counter,
-        'text' : state.text,
-        'flags' : state.flags,
-        'ques' : state.ques,
-        'answer' : state.answer,
-        'answerCode' : state.answerCode,
-        'token' : payload.token,
-        'lifes' : state.lifes,
-        'lifesIcon' : state.lifesIcon,
-        'timer' : state.timer,
-        'interval' : state.interval,
-        'maxTimer' : state.maxTimer,
-    };
-}
-
-const fire = (state, action) => {
-    console.log(state);
-}
-
 
 const tick = (state) => {
-    // state.timer = --state.timer;
     return {
         ...state,
-        'timer' : --state.timer
+        'timer' : --state.timer,
+        'sessionTimer' : ++state.sessionTimer,
     };
 }
 
 const restartTimer = (state) => {
     return {
         ...state,
-        'timer' : state.maxTimer
+        'timer' : state.maxTimer,
     }
 }
 
@@ -156,13 +116,13 @@ const stopTimer = (state) => {
     }
 }
 
-
 const initial = (state, action) => {
     // alert('initial state set');
     return { 
         'counter' : 0, 
         'text' : 'no data', 
         'flags' : {}, 
+        'flagi' : {}, 
         'ques' : 'ques', 
         'answer' : '-', 
         'answerCode' : '', 
@@ -170,17 +130,15 @@ const initial = (state, action) => {
         'lifes' : '3', 
         'lifesIcon' : '🟢🟢🟢',
         'timer' : 3,
-        'maxTimer' : 3,
-        'interval' : ''
+        'maxTimer' : 15,
+        'interval' : '',
+        'sessionTimer' : 0,
     }
 }
-
-
 
 export default (state = () =>
     new Map({
         counter : 0
-        // access: window.token,
     }), action) => {
     switch (action.type) {
         case 'add': return add(state);
@@ -189,7 +147,7 @@ export default (state = () =>
         case 'correct' : return correct(state);
         case 'incorrect' : return incorrect(state);
         case 'reset' : return reset(state);
-        case 'auth' : return auth(state, action.payload);
+        // case 'auth' : return auth(state, action.payload);
         case 'tick' : return tick(state);
         case 'restartTimer' : return restartTimer(state);
         case 'stopTimer' : return stopTimer(state);

@@ -1,87 +1,73 @@
 import React, {useEffect, useState} from 'react';
 import "./styles.css";
-import { Link } from 'react-router-dom';
 import TelegramLoginButton, { TelegramUser } from 'telegram-login-button'
-// import axios from "axios";
 import axios from "../../config/Axios";
 import { useHistory } from "react-router-dom";
-// import s from './styles.scss';
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import Card from "react-bootstrap/Card";
 import api from "../../config/Api";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 const Home = () => {
-    
     const history = useHistory();
-    const [some, setSome] = useState('ytn');
+    const [some, setSome] = useState('loading...');
     const handleTelegramResponse = async (user) => {
         const res = await axios.post(api.url+'/api/login', user);
         axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.token}`};
+        localStorage.setItem('accessToken', res.data.token);
         history.push('/flagsapi');
     };
     
-    // const getScores = async (user) => {
-    //     const aka = await axios.get('http://localhost:8000/flags/scores', user);
-    //     props.scores = aka;
-    //     // console.log(aka.data[0].firstName);
-    // }
-
+    const login = async () => {
+        const res = await axios.get(api.url+'/token');
+        axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.token}`};
+        localStorage.setItem('accessToken', res.data.token);
+        history.push('/flagsapi');
+    }
     
-    // const listScores = (some) => some.map((score) =>
-    //     <li>{score}</li>
-    // );
- 
-    // const getScores = async (user, props) => {
-    //     return await axios.get('http://localhost:8000/flags/scores', user);
-    //     // props.scores = aka;
-    //     // console.log(props);
-    //     // console.log(aka.data[0].firstName);
-    // }
-
-    // const scores = (user) => {
-    //     return axios.get('http://localhost:8000/flags/scores', user).data[0].firstName;
-    //     // console.log(aka.data[0].firstName);
-    // }
     useEffect(  () => {
         const per = axios.get(api.url+'/flags/scores');
-        // setSome(per);
-        
          per.then(res => (
-            setSome(res.data.map((item) => (<li>{item.firstName}  {item.highScore} </li>)))
+            setSome(res.data.map((item) => (
+                
+                <li>
+                    {item.firstName} score: {item.highScore} ({item.bestTime} sec) 
+                    [total: {item.gamesTotal} games {(item.timeTotal/3600).toFixed(2)} hours]</li>)))
         ));
+         
+         if (api.mode === 'dev') {
+             // alert();
+         }
         
     }, []);
     
     return (
-        <div style={{ width: '300px', margin: 'auto', marginTop: '20%' }}>
-            <Card border="dark">
-                <Card.Header><h3>Flags quiz</h3></Card.Header>
-                <Card.Body>
-                    <Card.Title>High scores:</Card.Title>
-                    <Card.Text>
-                        {some}
-                        
-                    </Card.Text>
-                    
-                </Card.Body>
-                <Card.Footer><TelegramLoginButton dataOnauth={(user) => handleTelegramResponse(user)} botName="carthingbot" /></Card.Footer>
-            </Card>
-            <br />
-        {/*<h2>Flags app</h2>*/}
-        {/*<h3>Please login 👇🏻</h3>*/}
-        {/*<p>*/}
-            
-            {/*<button onClick={getScores}>OK</button>*/}
-           
-        {/*</p>*/}
-
-        {/*<Jumbotron fluid>*/}
-        {/*    */}
-        {/*    /!*{listScores(some)}*!/*/}
-        {/*   */}
-        {/*</Jumbotron>*/}
-        {/*<h3>OR sign up ☝🏻</h3>*/}
-    </div>)
+            <Container>
+                <Row >
+                    <Col xs={12} s={12} lg={12} md={12}>
+                        <Card style={{'height' : window.innerHeight}}>
+                            <Card.Header style={{'display' : 'flex', 'justify-content': 'center'}}><h3>Flags quiz</h3></Card.Header>
+                            <Card.Body>
+                                <Card.Title style={{'display' : 'flex', 'justify-content': 'center', 'margin-right' : '20px'}}>High scores:</Card.Title>
+                                <Card.Text style={{'display' : 'flex', 'justify-content': 'center', 'margin-right' : '20px'}}>
+                                    <ul style={{'align' : 'center'}}>
+                                        {some}
+                                    </ul>
+                                </Card.Text>
+                            </Card.Body>
+                            
+                            <Card.Footer style={{'display' : 'flex', 'justify-content': 'center'}}>
+                                <TelegramLoginButton dataOnauth={(user) => handleTelegramResponse(user)} botName="carthingbot" />
+                                {api.mode == 'dev' ? <button onClick={login}>
+                                    Login
+                                </button> : '' } 
+                            </Card.Footer>
+                        </Card>
+                    </Col>
+                </Row>
+        </Container>
+    )
 }
 
 export default Home;

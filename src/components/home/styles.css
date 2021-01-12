@@ -1,3 +1,9 @@
+
+body {
+    margin: 0!important;
+    padding: 0!important;
+}
+
 a:link {
     color: gray;
 }
@@ -21,10 +27,24 @@ h2 {
 }
 
 span.flag {
-    margin :15px 0px;
-    font-size: 87px;
+    margin: 0;
+    padding: 0;
+    font-size: 80px;
     display: inline-block;
     /*font-size: 90px;*/
     border: 3px dotted transparent;
 }
 
+div.container {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+}
+div.col-12 {
+    max-width: 100%;
+    padding: 0;
+}
+
+div.row {
+    margin: 0;
+}

@@ -16,13 +16,13 @@ import Application from './containers/index.jsx';
 // import reducer from './reducers/initial.js';
 
 import appReducers  from './reducers/index';
-
 import { createStore } from 'redux';
 
 // import storeCreator from './store'
 import Flags from "./components/flags/Flags";
 import Home from "./components/home/Home";
 import FlagsApi from "./components/flags/FlagsApi";
+import Profile from "./components/flags/Profile";
 
 //
 // const store = storeCreator();
@@ -52,6 +52,7 @@ function App() {
           <Router>
               <Switch>
                 <Route path="/flagsapi" component={FlagsApi} />
+                  {/*<Route path="/profile" component={Profile} />*/}
                 <Route path="/flags" component={Flags} />
                 <Route path="/" component={Home} />
             {/*<Application />*/}

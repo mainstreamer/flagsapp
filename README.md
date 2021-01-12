@@ -1,3 +1,7 @@
+
+### Link
+[https://flags-app.izeebot.top](https://flags-app.izeebot.top)  
+
 ### Initial setup
   - `git clone` 
   - `git submodule update --init`
@@ -10,8 +14,11 @@
   - `127.0.0.1:3306`  
   - `user: root`  
   - `pass: root`  
-  - `dbname: flags`  
+  - `dbname: flags`
+## Available Scripts
 
+In the project directory, you can run:
+ 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

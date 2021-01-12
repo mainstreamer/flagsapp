@@ -1,3 +1,18 @@
+### Initial setup
+  - `git clone` 
+  - `git submodule set-branch dev-env`
+  - `git submodule update --init`
+  - `./start-api.sh`
+  - `/docker/.import-db.sh`
+### Run api for local dev
+  - `./start-api.sh`
+### Database
+  - `MySql 5.7`  
+  - `127.0.0.1:3306`  
+  - `user: root`  
+  - `pass: root`  
+  - `dbname: flags`  
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -3,13 +3,9 @@
 [https://flags-app.izeebot.top](https://flags-app.izeebot.top)  
 
 ### Initial setup
-  - `git clone` 
-  - `git submodule add -b flags-api -- git@github.com:mainstreamer/docker-config.git .docker`
-  - `git submodule update --init`
-  - `./start-api.sh`
-  - `docker/.import-db.sh`
+  - `make init` 
 ### Run api for local dev
-  - `./start-api.sh`
+  - `make run`
 ### Database
   - `MySql 5.7`  
   - `127.0.0.1:3306`  

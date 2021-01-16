@@ -24,7 +24,7 @@ init-submodule:
 	git submodule update --init
 	cd ${CODE_PATH} && make init
 update:
-	git submodule update --remote	
+	git submodule update --remote
 init-subsubmodule:
 	cd ${CODE_PATH} && make init
 run: 

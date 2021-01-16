@@ -18,16 +18,8 @@ reset:
 #rm -rf path_to_submodule
 	/bin/rm  -rf ${CODE_PATH}
 	git remote add origin ${GIT_REMOTE_URL}
-init: init-submodule update init-subsubmodule
+init: init-submodule
 init-submodule:
 	git submodule add -b ${BRANCH} -- ${GIT_URL} ${CODE_PATH}
 	git submodule update --init
 	cd ${CODE_PATH} && make init
-update:
-	git submodule update --remote
-init-subsubmodule:
-	cd ${CODE_PATH} && make init
-run: 
-	cd ${CODE_PATH} && docker-compose up
-stop: 
-	cd ${CODE_PATH} && docker stop $(docker ps -q)

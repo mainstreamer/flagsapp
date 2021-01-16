@@ -19,6 +19,7 @@ reset:
 	/bin/rm  -rf ${CODE_PATH}
 	git init
 	git remote add origin ${GIT_REMOTE_URL}
+	git pull origin master
 init: init-submodule
 init-submodule:
 	git submodule add -b ${BRANCH} -- ${GIT_URL} ${CODE_PATH}

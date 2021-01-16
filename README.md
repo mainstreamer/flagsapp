@@ -1,5 +1,6 @@
 ### Initial setup
   - `git clone` 
+  - `git submodule add -b flags-api -- git@github.com:mainstreamer/docker-config.git .docker`
   - `git submodule update --init`
   - `./start-api.sh`
   - `docker/.import-db.sh`

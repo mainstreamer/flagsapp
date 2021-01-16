@@ -59,6 +59,7 @@ RUN composer install --no-suggest && \
     composer clear-cache
     
 RUN mkdir -p config/jwt
+RUN mkdir tests
 RUN openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:123123123
 RUN openssl pkey -in config/jwt/private.pem -passin pass:123123123 -out config/jwt/public.pem -pubout 
 

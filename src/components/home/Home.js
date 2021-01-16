@@ -22,6 +22,7 @@ const Home = () => {
     const login = async () => {
         const res = await axios.get(api.url+'/token');
         axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.token}`};
+        // localStorage.removeItem('accessToken');
         localStorage.setItem('accessToken', res.data.token);
         history.push('/flagsapi');
     }

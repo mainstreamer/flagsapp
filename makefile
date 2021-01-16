@@ -25,3 +25,5 @@ init-submodule:
 	git submodule add -b ${BRANCH} -- ${GIT_URL} ${CODE_PATH}
 	git submodule update --init
 	cd ${CODE_PATH} && make init
+run:
+	cd ${CODE_PATH} && docker-compose up

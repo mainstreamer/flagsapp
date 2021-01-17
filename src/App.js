@@ -52,7 +52,7 @@ function App() {
           <Router>
               <Switch>
                 <Route path="/flagsapi" component={FlagsApi} />
-                  {/*<Route path="/profile" component={Profile} />*/}
+                  <Route path="/profile" component={Profile} />
                 <Route path="/flags" component={Flags} />
                 <Route path="/" component={Home} />
             {/*<Application />*/}

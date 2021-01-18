@@ -34,3 +34,12 @@ div.col-12 {
 div.row {
     margin: 0;
 }
+
+.table td{
+    vertical-align: middle;
+    padding: 0;
+    line-height: 1em;
+    font-size: 20px;
+    font-weight: bold;
+}
+

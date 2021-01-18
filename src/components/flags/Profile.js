@@ -9,9 +9,12 @@ import Table from "react-bootstrap/Table";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 
 const Profile = () => 
 {
+    const [key, setKey] = useState('incorrect');
     const [user, setUser] = useState('loading...');
     const [correct, setCorrect] = useState('loading...');
     const [incorrect, setIncorrect] = useState('loading...');
@@ -41,20 +44,32 @@ const Profile = () =>
     }, []);
         return (
             <div>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src={user.telegramPhotoUrl} />
+                <Card >
+                    <Card.Img variant="left" src={user.telegramPhotoUrl} />
                     <Card.Body>
-                        <Card.Title>Profile</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
-                        </Card.Text>
+                        <Card.Title>{user.firstName} {user.lastName} (@{user.telegramUsername})</Card.Title>
+                        {/*<Card.Text>*/}
+                        {/*    Some quick example text to build on the card title and make up the bulk of*/}
+                        {/*    the card's content.*/}
+                        {/*</Card.Text>*/}
                     </Card.Body>
                     <ListGroup className="list-group-flush">
-                        <ListGroupItem>High scores: {user.highScore}</ListGroupItem>
-                        <ListGroupItem>Best time: {user.bestTime}</ListGroupItem>
-                        <ListGroupItem>Total games: {user.gamesTotal}</ListGroupItem>
-                        <ListGroupItem>Time total: {user.timeTotal}</ListGroupItem>
+                        <ListGroup horizontal>
+                            <ListGroupItem style={{ 'min-width' : '20em'}}>High score:</ListGroupItem>
+                            <ListGroupItem style={{ 'width' : '100%'}}>{user.highScore}</ListGroupItem>
+                        </ListGroup>
+                        <ListGroup horizontal>
+                            <ListGroupItem style={{ 'min-width' : '20em'}}>Best time:</ListGroupItem>
+                            <ListGroupItem style={{ 'width' : '100%'}}>{user.bestTime}</ListGroupItem>
+                        </ListGroup>
+                        <ListGroup horizontal>
+                            <ListGroupItem style={{ 'min-width' : '20em'}}>Total games:</ListGroupItem>
+                            <ListGroupItem style={{ 'width' : '100%'}}> {user.gamesTotal}</ListGroupItem>
+                        </ListGroup>
+                        <ListGroup horizontal>
+                            <ListGroupItem style={{ 'min-width' : '20em'}}>Time total:</ListGroupItem>
+                            <ListGroupItem style={{ 'width' : '100%'}}>{user.timeTotal}</ListGroupItem>
+                        </ListGroup>
                     </ListGroup>
                     {/*<Card.Body>*/}
                     {/*    <Card.Link href="#">Card Link</Card.Link>*/}
@@ -68,18 +83,27 @@ const Profile = () =>
                 {/*<p>Best time: {user.bestTime}</p>*/}
                 {/*<p>Time total: {user.timeTotal}</p>*/}
                 {/*<p><img src={user.telegramPhotoUrl}/></p>*/}
-                <h3>Incorrect</h3>
-                <Table>
-                    <tbody>
-                        {incorrect}
-                    </tbody>
-                </Table>
-                <h3>Correct</h3>
-                <Table>
-                    <tbody>
-                        {correct}
-                    </tbody>
-                </Table>
+
+                <Tabs
+                    id="controlled-tab-example"
+                    activeKey={key}
+                    onSelect={(k) => setKey(k)}
+                >
+                    <Tab eventKey="incorrect" title="Incorrect">
+                        <Table striped={true}>
+                            <tbody>
+                                {incorrect}
+                            </tbody>
+                        </Table>
+                    </Tab>
+                    <Tab eventKey="correct" title="Correct">
+                        <Table striped={true}>
+                            <tbody>
+                                {correct}
+                            </tbody>
+                        </Table>
+                    </Tab>
+                </Tabs>
             </div>
         )
     // }

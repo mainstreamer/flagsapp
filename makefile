@@ -15,6 +15,7 @@ reset:
 	/bin/rm -rf .git/modules/${CODE_PATH}
 #Commit git commit -m "Removed submodule"
 	git commit -am "Removed submodule"
+	git reset --hard HEAD~1
 #rm -rf path_to_submodule 
 	/bin/rm  -rf ${CODE_PATH}
 	git init

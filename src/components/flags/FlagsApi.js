@@ -185,6 +185,10 @@ class FlagsApi extends React.Component {
         this.startGame();
         // this.foo();
     }
+    componentWillUnmount() {
+        this.gameOver();
+    }
+    
 
     restartGame() {
         console.log('RESTART');
@@ -319,6 +323,7 @@ class FlagsApi extends React.Component {
     }
 
     redirectToProfile = () => {
+        this.gameOver();
         this.props.history.push('/profile');
     }
 }

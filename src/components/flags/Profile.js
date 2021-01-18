@@ -31,6 +31,8 @@ const Profile = () =>
             setIncorrect(convert(res.data))
         );
         
+        window.innerWidth = '100%';
+        
         const convert = (item) => {
             return item.map((item) =>
                 <tr>
@@ -43,7 +45,7 @@ const Profile = () =>
         }
     }, []);
         return (
-            <div>
+            <div style={{'height' : window.innerHeight, 'margin' : '0px', 'padding' : '0px'}}>
                 <Card >
                     <Card.Img variant="left" src={user.telegramPhotoUrl} />
                     <Card.Body>
@@ -55,19 +57,19 @@ const Profile = () =>
                     </Card.Body>
                     <ListGroup className="list-group-flush">
                         <ListGroup horizontal>
-                            <ListGroupItem style={{ 'min-width' : '20em'}}>High score:</ListGroupItem>
+                            <ListGroupItem style={{ 'min-width' : '12em'}}>High score:</ListGroupItem>
                             <ListGroupItem style={{ 'width' : '100%'}}>{user.highScore}</ListGroupItem>
                         </ListGroup>
                         <ListGroup horizontal>
-                            <ListGroupItem style={{ 'min-width' : '20em'}}>Best time:</ListGroupItem>
+                            <ListGroupItem style={{ 'min-width' : '12em'}}>Best time:</ListGroupItem>
                             <ListGroupItem style={{ 'width' : '100%'}}>{user.bestTime}</ListGroupItem>
                         </ListGroup>
                         <ListGroup horizontal>
-                            <ListGroupItem style={{ 'min-width' : '20em'}}>Total games:</ListGroupItem>
+                            <ListGroupItem style={{ 'min-width' : '12em'}}>Total games:</ListGroupItem>
                             <ListGroupItem style={{ 'width' : '100%'}}> {user.gamesTotal}</ListGroupItem>
                         </ListGroup>
                         <ListGroup horizontal>
-                            <ListGroupItem style={{ 'min-width' : '20em'}}>Time total:</ListGroupItem>
+                            <ListGroupItem style={{ 'min-width' : '12em'}}>Time total:</ListGroupItem>
                             <ListGroupItem style={{ 'width' : '100%'}}>{user.timeTotal}</ListGroupItem>
                         </ListGroup>
                     </ListGroup>

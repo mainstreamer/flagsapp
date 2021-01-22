@@ -28,5 +28,7 @@ init-submodule:
 	cd ${CODE_PATH} && make init
 run:
 	cd ${CODE_PATH} && docker-compose up
+stop:
+	cd ${CODE_PATH} && docker-compose down
 build-containers:
 	cd ${CODE_PATH} && docker-compose build	

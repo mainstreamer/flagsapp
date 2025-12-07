@@ -8,6 +8,8 @@ import api from "../../config/Api";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { useOAuth } from '../../hooks/useOAuth';  // Add this
+import Button from "react-bootstrap/Button";  // Add this line
 
 const Home = () => {
     const history = useHistory();
@@ -27,6 +29,8 @@ const Home = () => {
         history.push('/flagsapi');
     }
     
+     const { login: oauthLogin, isLoading } = useOAuth();  // Add this
+
     useEffect(  () => {
         const per = axios.get(api.url+'/flags/scores');
          per.then(res => (
@@ -63,6 +67,15 @@ const Home = () => {
                                 {api.mode == 'dev' ? <button onClick={login}>
                                     Login
                                 </button> : '' } 
+
+                                {/* Add OAuth Login Button */}
+                                <Button 
+                                    variant="primary" 
+                                    onClick={oauthLogin}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Logging in...' : 'Login with OAuth'}
+                                </Button>
                             </Card.Footer>
                         </Card>
                     </Col>

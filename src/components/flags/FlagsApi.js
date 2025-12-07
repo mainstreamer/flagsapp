@@ -48,7 +48,7 @@ class FlagsApi extends React.Component {
         }
 
         if (action === 'protected') {
-            const res = await axios.get(api.url+'/protected');
+            const res = await axios.get(api.url+'/api/protected');
         }
     }
 

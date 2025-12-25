@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+FOLDER=scripts
+
+export DOCKER_BUILDKIT=1
+
+echo "Building image..."
+./$FOLDER/build-for-prod.local
+
+echo "Tagging image..."
+./$FOLDER/tag-img.local
+
+echo "Pushing image..."
+./$FOLDER/push-img.local
+
+cd ..
+
+echo "All done!"

@@ -22,7 +22,7 @@ class FlagsApi extends React.Component {
     
     async handleClick(action) {
         if (action === 'api') {
-            const res = await axios.get(api.url+'/test');
+            const res = await axios.get(api.url+'/api/flags/test');
             this.props.dispatch(
                 {type : 'set', payload: 
                     {   'text' : res.data.message, 
@@ -48,7 +48,7 @@ class FlagsApi extends React.Component {
         }
 
         if (action === 'protected') {
-            const res = await axios.get(api.url+'/api/protected');
+            const res = await axios.get(api.url+'/api/flags/protected');
         }
     }
 
@@ -63,7 +63,7 @@ class FlagsApi extends React.Component {
         
         if (action === this.props.answer) {
             this.stopTimer();
-            await axios.post(api.url+'/flags/correct/'+this.props.answerCode);
+            await axios.post(api.url+'/api/flags/correct/'+this.props.answerCode);
             this.props.dispatch({type : 'correct' })
             setTimeout(() => {
                 this.showFlags();
@@ -175,7 +175,7 @@ class FlagsApi extends React.Component {
     }
     
     submitScore(score, sessionTimer) {
-            const res = axios.post(api.url+'/flags/scores', { 'score' : score, 'sessionTimer' : sessionTimer, 'answers' : this.answers });
+            const res = axios.post(api.url+'/api/flags/scores', { 'score' : score, 'sessionTimer' : sessionTimer, 'answers' : this.answers });
             this.answers = [];
             console.log(res);
     }

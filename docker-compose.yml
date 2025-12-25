@@ -1,0 +1,7 @@
+services:
+  flagsapp:
+    build: .
+    container_name: flagsapp
+    ports:
+      - "80:80"
+    restart: unless-stopped

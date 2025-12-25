@@ -32,7 +32,7 @@ const Home = () => {
      const { login: oauthLogin, isLoading } = useOAuth();  // Add this
 
     useEffect(  () => {
-        const per = axios.get(api.url+'/flags/scores');
+        const per = axios.get(api.url+'/api/flags/scores');
          per.then(res => (
             setSome(res.data.map((item) => (
                 

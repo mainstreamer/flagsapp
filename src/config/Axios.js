@@ -2,7 +2,7 @@ import api from '../config/Api';
 const axios = require('axios');
 
 axios.defaults.baseURL = api.url;
-axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
+// axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
 
 // Add token from localStorage to every request
 const token = localStorage.getItem('accessToken');

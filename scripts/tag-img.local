@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+## ydf its auth-app ? {folder}-{service_name}?
+## i should rename it
+## Tag your image
+docker tag flagsapp-flagsapp ghcr.io/mainstreamer/flagsapp:latest

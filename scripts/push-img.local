@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+## Push
+docker push ghcr.io/mainstreamer/flagsapp:latest

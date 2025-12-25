@@ -36,15 +36,15 @@ const Profile = () => {
 
         // 3. API Calls (Using Relative paths due to Proxy)
         // Note: api.url should be an empty string '' in your config
-        axios.get(`${api.url}/api/protected`, config)
+        axios.get(`${api.url}/api/flags/protected`, config)
             .then(res => setUser(res.data))
             .catch(err => console.error("Error loading user profile:", err));
 
-        axios.get(`${api.url}/api/correct`, config)
+        axios.get(`${api.url}/api/flags/correct`, config)
             .then(res => setCorrect(convertData(res.data)))
             .catch(err => console.error("Error loading correct flags:", err));
 
-        axios.get(`${api.url}/api/incorrect`, config)
+        axios.get(`${api.url}/api/flags/incorrect`, config)
             .then(res => setIncorrect(convertData(res.data)))
             .catch(err => console.error("Error loading incorrect flags:", err));
 

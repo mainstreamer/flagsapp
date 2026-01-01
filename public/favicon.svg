@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <pattern id="checkers" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="#fff"/>
+      <rect x="4" width="4" height="4" fill="#222"/>
+      <rect y="4" width="4" height="4" fill="#222"/>
+      <rect x="4" y="4" width="4" height="4" fill="#fff"/>
+    </pattern>
+  </defs>
+  <!-- Flag pole -->
+  <rect x="8" y="8" width="4" height="52" rx="2" fill="#8B4513"/>
+  <!-- Flag with wave effect -->
+  <path d="M12 10 Q32 8 52 12 Q54 20 52 28 Q32 32 12 28 Z" fill="url(#checkers)" stroke="#333" stroke-width="1"/>
+  <!-- Pole cap -->
+  <circle cx="10" cy="8" r="3" fill="#FFD700"/>
+</svg>

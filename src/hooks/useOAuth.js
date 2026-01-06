@@ -22,29 +22,39 @@ export const useOAuth = () => {
     );
 
     const handleMessage = (event) => {
+      // Debug logging
+      console.log('OAuth message received:', event.origin, event.data);
+
       // Verify origin
       if (event.origin !== api.url) {
+        console.warn('OAuth message from incorrect origin:', event.origin, 'expected:', api.url);
         return;
       }
 
       if (event.data.type === 'oauth_success') {
+        console.log('OAuth success! Storing tokens...');
+
         // Store tokens
         localStorage.setItem('accessToken', event.data.access_token);
         localStorage.setItem('refreshToken', event.data.refresh_token);
-        
+
         // Set axios default header
         axios.defaults.headers.common = {
           'Authorization': `Bearer ${event.data.access_token}`
         };
 
+        console.log('Token stored, redirecting to game...');
+
         setIsLoading(false);
         if (popup) popup.close();
-        
+
         // Clean up
         window.removeEventListener('message', handleMessage);
-        
+
         // Redirect to flags page
         history.push('/flagsapi');
+      } else {
+        console.warn('Unexpected OAuth message type:', event.data.type);
       }
     };
 

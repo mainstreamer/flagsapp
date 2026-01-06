@@ -1,50 +1,82 @@
-
-body {
-    margin: 0!important;
-    padding: 0!important;
+/* Hero Section */
+.home-hero {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 0.5rem;
+  margin-bottom: 0;
 }
 
-a:link {
-    color: gray;
-}
-a:visited {
-    color: green;
-}
-a:hover {
-    color: rebeccapurple;
-}
-a:active {
-    color: teal;
+.home-hero h1 {
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
 }
 
-h2 {
-    color: red;
+.home-hero p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
 }
 
-.toast-body span {
-    line-height: 1em;
-    margin-top: 15px;
+/* Leaderboard Table */
+.leaderboard-table {
+  margin-bottom: 0;
 }
 
-span.flag {
-    margin: 0;
-    padding: 0;
-    font-size: 80px;
-    display: inline-block;
-    /*font-size: 90px;*/
-    border: 3px dotted transparent;
+.leaderboard-table thead th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-div.container {
-    margin: 0;
-    padding: 0;
-    max-width: none;
-}
-div.col-12 {
-    max-width: 100%;
-    padding: 0;
+.leaderboard-table tbody td {
+  padding: 0.75rem;
+  vertical-align: middle;
 }
 
-div.row {
-    margin: 0;
+.leaderboard-table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.leaderboard-table .rank-cell {
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-width: 80px;
+}
+
+.leaderboard-table .score-cell {
+  font-weight: 700;
+  color: #079430;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-hero {
+    padding: 2rem 1rem;
+  }
+
+  .home-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .leaderboard-table {
+    font-size: 0.875rem;
+  }
+
+  .leaderboard-table thead th {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .leaderboard-table tbody td {
+    padding: 0.5rem;
+  }
 }

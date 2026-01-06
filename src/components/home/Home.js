@@ -1,85 +1,102 @@
 import React, {useEffect, useState} from 'react';
 import "./styles.css";
-import TelegramLoginButton, { TelegramUser } from 'telegram-login-button'
 import axios from "../../config/Axios";
-import { useHistory } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import api from "../../config/Api";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useOAuth } from '../../hooks/useOAuth';  // Add this
-import Button from "react-bootstrap/Button";  // Add this line
+import Table from "react-bootstrap/Table";
+import { useOAuth } from '../../hooks/useOAuth';
+import Button from "react-bootstrap/Button";
 
 const Home = () => {
-    const history = useHistory();
-    const [some, setSome] = useState('loading...');
-    const handleTelegramResponse = async (user) => {
-        const res = await axios.post(api.url+'/api/login', user);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.token}`};
-        localStorage.setItem('accessToken', res.data.token);
-        history.push('/flagsapi');
-    };
-    
-    const login = async () => {
-        const res = await axios.get(api.url+'/token');
-        axios.defaults.headers.common = {'Authorization': `Bearer ${res.data.token}`};
-        // localStorage.removeItem('accessToken');
-        localStorage.setItem('accessToken', res.data.token);
-        history.push('/flagsapi');
-    }
-    
-     const { login: oauthLogin, isLoading } = useOAuth();  // Add this
+    const [leaderboard, setLeaderboard] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { login: oauthLogin, isLoading } = useOAuth();
 
-    useEffect(  () => {
-        const per = axios.get(api.url+'/api/flags/scores');
-         per.then(res => (
-            setSome(res.data.map((item) => (
-                
-                <li>
-                    {item.firstName} score: {item.highScore} ({item.bestTime} sec) 
-                    [total: {item.gamesTotal} games {(item.timeTotal/3600).toFixed(2)} hours]</li>)))
-        ));
-         
-         if (api.mode === 'dev') {
-             // alert();
-         }
-        
+    useEffect(() => {
+        axios.get(api.url + '/api/flags/scores')
+            .then(res => {
+                setLeaderboard(res.data.slice(0, 10));
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error('Error loading leaderboard:', err);
+                setLoading(false);
+            });
     }, []);
-    
-    return (
-            <Container>
-                <Row >
-                    <Col xs={12} s={12} lg={12} md={12}>
-                        <Card style={{'height' : window.innerHeight}}>
-                            <Card.Header style={{'display' : 'flex', 'justify-content': 'center'}}><h3>Flags quiz</h3></Card.Header>
-                            <Card.Body>
-                                <Card.Title style={{'display' : 'flex', 'justify-content': 'center', 'margin-right' : '20px'}}>High scores:</Card.Title>
-                                <Card.Text style={{'display' : 'flex', 'justify-content': 'center', 'margin-right' : '20px'}}>
-                                    <ul style={{'align' : 'center'}}>
-                                        {some}
-                                    </ul>
-                                </Card.Text>
-                            </Card.Body>
-                            
-                            <Card.Footer style={{'display' : 'flex', 'justify-content': 'center'}}>
-                                <TelegramLoginButton dataOnauth={(user) => handleTelegramResponse(user)} botName="carthingbot" />
-                                {api.mode == 'dev' ? <button onClick={login}>
-                                    Login
-                                </button> : '' } 
 
-                                {/* Add OAuth Login Button */}
-                                <Button 
-                                    variant="primary" 
-                                    onClick={oauthLogin}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'Logging in...' : 'Login with OAuth'}
-                                </Button>
-                            </Card.Footer>
-                        </Card>
-                    </Col>
-                </Row>
+    return (
+        <Container className="py-5">
+            {/* Hero Section */}
+            <Row className="mb-5">
+                <Col xs={12} md={8} lg={6} className="mx-auto">
+                    <div className="home-hero">
+                        <h1><span role="img" aria-label="checkered flag">🏁</span> Flags Quiz</h1>
+                        <p>Test your geography knowledge and compete for the top spot!</p>
+                        <Button
+                            variant="success"
+                            size="lg"
+                            onClick={oauthLogin}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Logging in...' : 'Login to Play'}
+                        </Button>
+                    </div>
+                </Col>
+            </Row>
+
+            {/* Leaderboard Section */}
+            <Row>
+                <Col xs={12} lg={10} className="mx-auto">
+                    <Card>
+                        <Card.Header as="h3" className="text-center">
+                            High Scores
+                        </Card.Header>
+                        <Card.Body>
+                            {loading ? (
+                                <div className="text-center py-5">Loading leaderboard...</div>
+                            ) : leaderboard.length === 0 ? (
+                                <p className="text-center text-muted">No scores yet. Be the first to play!</p>
+                            ) : (
+                                <Table striped hover responsive className="leaderboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-center">Rank</th>
+                                            <th>Player</th>
+                                            <th className="text-center">High Score</th>
+                                            <th className="text-center">Best Time</th>
+                                            <th className="text-center">Games</th>
+                                            <th className="text-center">Hours</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {leaderboard.map((player, index) => {
+                                            const rank = index + 1;
+                                            let medal = null;
+                                            if (rank === 1) medal = <span role="img" aria-label="gold medal">🥇 </span>;
+                                            else if (rank === 2) medal = <span role="img" aria-label="silver medal">🥈 </span>;
+                                            else if (rank === 3) medal = <span role="img" aria-label="bronze medal">🥉 </span>;
+
+                                            return (
+                                                <tr key={index}>
+                                                    <td className="text-center rank-cell">{medal}{rank}</td>
+                                                    <td>{player.firstName}</td>
+                                                    <td className="text-center score-cell">{player.highScore}</td>
+                                                    <td className="text-center">{player.bestTime}s</td>
+                                                    <td className="text-center">{player.gamesTotal}</td>
+                                                    <td className="text-center">{(player.timeTotal / 3600).toFixed(2)}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </Table>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
         </Container>
     )
 }

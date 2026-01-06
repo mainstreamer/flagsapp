@@ -16,6 +16,10 @@ const Home = () => {
     const { login: oauthLogin, isLoading } = useOAuth();
 
     useEffect(() => {
+        // Debug: Check authentication status
+        const token = localStorage.getItem('accessToken');
+        console.log('Current auth token:', token ? 'Present' : 'Missing');
+
         axios.get(api.url + '/api/flags/scores')
             .then(res => {
                 setLeaderboard(res.data.slice(0, 10));

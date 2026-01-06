@@ -12,6 +12,22 @@ h1 {
     color: #6c757d;
 }
 
+.flag {
+    font-size: 120px;
+    border: 3px dotted transparent;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.flag:hover {
+    transform: scale(1.1);
+}
+
+#correct {
+    border-color: #079430;
+}
+
 .toast {
     max-width: 900px;
 }

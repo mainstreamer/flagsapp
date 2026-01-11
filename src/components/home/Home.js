@@ -70,7 +70,7 @@ const Home = () => {
                                             <tr>
                                                 <th className="text-center">Rank</th>
                                                 <th>Player</th>
-                                                <th className="text-center">High Score</th>
+                                                <th className="text-center">Top Score</th>
                                                 <th className="text-center">Best Time</th>
                                                 <th className="text-center">Games</th>
                                                 <th className="text-center">Time Total</th>
@@ -89,9 +89,17 @@ const Home = () => {
                                                         <td className="text-center rank-cell">{medal}{rank}</td>
                                                         <td>{player.firstName}</td>
                                                         <td className="text-center score-cell">{player.highScore}</td>
-                                                        <td className="text-center">{player.bestTime}s</td>
+                                                        <td className="text-center time-cell">
+                                                            {(() => {
+                                                                const totalSeconds = player.bestTime;
+                                                                const minutes = Math.floor(totalSeconds / 60);
+                                                                const seconds = totalSeconds % 60;
+                                                                const pad = (n) => String(n).padStart(2, '0');
+                                                                return `${pad(minutes)}:${pad(seconds)}`;
+                                                            })()}
+                                                        </td>
                                                         <td className="text-center">{player.gamesTotal}</td>
-                                                        <td className="text-center time-total-cell">
+                                                        <td className="text-center time-cell">
                                                             {(() => {
                                                                 const totalSeconds = player.timeTotal;
                                                                 const hours = Math.floor(totalSeconds / 3600);

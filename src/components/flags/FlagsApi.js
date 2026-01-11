@@ -19,7 +19,9 @@ import { useHistory } from "react-router-dom";
 
 
 class FlagsApi extends React.Component {
-    
+
+    gameEnded = false;
+
     async handleClick(action) {
         if (action === 'api') {
             const res = await axios.get(api.url+'/api/flags/test');
@@ -107,6 +109,7 @@ class FlagsApi extends React.Component {
     }
     
     async startGame() {
+        this.gameEnded = false;
         this.stopTimer();
         await this.handleClick('api').then(() => this.startTimer()).then(() => this.prepareStat());
     }
@@ -121,6 +124,10 @@ class FlagsApi extends React.Component {
     }
     
     async gameOver() {
+        if (this.gameEnded) {
+            return;
+        }
+        this.gameEnded = true;
         this.stopTimer();
         await this.submitScore(this.props.counter, this.props.sessionTimer);
     }

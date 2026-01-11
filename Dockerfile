@@ -14,8 +14,12 @@ RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
 # Copy source code
 COPY . .
 
-# Build the production bundle
+# Build argument for version (passed from CI/CD pipeline)
+ARG APP_VERSION=""
 ENV NODE_OPTIONS=--openssl-legacy-provider
+ENV REACT_APP_VERSION=${APP_VERSION}
+
+# Build the production bundle with version baked in
 RUN if [ -f yarn.lock ]; then yarn build; else npm run build; fi
 
 # Stage 2: Serve with Caddy

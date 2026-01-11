@@ -9,7 +9,6 @@ import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import { useOAuth } from '../../hooks/useOAuth';
 import Button from "react-bootstrap/Button";
-import packageJson from '../../../package.json';
 
 const Home = () => {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -92,13 +91,14 @@ const Home = () => {
                                                         <td className="text-center score-cell">{player.highScore}</td>
                                                         <td className="text-center">{player.bestTime}s</td>
                                                         <td className="text-center">{player.gamesTotal}</td>
-                                                        <td className="text-center">
+                                                        <td className="text-center time-total-cell">
                                                             {(() => {
                                                                 const totalSeconds = player.timeTotal;
                                                                 const hours = Math.floor(totalSeconds / 3600);
                                                                 const minutes = Math.floor((totalSeconds % 3600) / 60);
                                                                 const seconds = totalSeconds % 60;
-                                                                return `${hours}h ${minutes}m ${seconds}s`;
+                                                                const pad = (n) => String(n).padStart(2, '0');
+                                                                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
                                                             })()}
                                                         </td>
                                                     </tr>
@@ -120,7 +120,7 @@ const Home = () => {
                         <div className="footer-left">
                             <span>Flags Quiz</span>
                             <span className="footer-divider">|</span>
-                            <span className="footer-version">v{packageJson.version}</span>
+                            <span className="footer-version">{process.env.REACT_APP_VERSION || 'dev'}</span>
                         </div>
                         <div className="footer-center">
                             <span>Feedback: <a href="mailto:admin@izeebot.top">admin@izeebot.top</a></span>

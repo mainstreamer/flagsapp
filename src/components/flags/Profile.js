@@ -32,50 +32,12 @@ const Profile = () => {
             .then(res => setUser(res.data))
             .catch(err => console.error("Error loading user profile:", err));
 
-        // Fetch both correct and incorrect, then merge
-        Promise.all([
-            axios.get(`${api.url}/api/flags/correct`, config),
-            axios.get(`${api.url}/api/flags/incorrect`, config)
-        ]).then(([correctRes, incorrectRes]) => {
-            const correctData = Array.isArray(correctRes.data) ? correctRes.data : [];
-            const incorrectData = Array.isArray(incorrectRes.data) ? incorrectRes.data : [];
-
-            // Merge data by flagCode
-            const merged = {};
-
-            correctData.forEach(item => {
-                merged[item.flagCode] = {
-                    flag: item.flag,
-                    country: item.country,
-                    flagCode: item.flagCode,
-                    correct: item.times,
-                    incorrect: 0
-                };
-            });
-
-            incorrectData.forEach(item => {
-                if (merged[item.flagCode]) {
-                    merged[item.flagCode].incorrect = item.times;
-                } else {
-                    merged[item.flagCode] = {
-                        flag: item.flag,
-                        country: item.country,
-                        flagCode: item.flagCode,
-                        correct: 0,
-                        incorrect: item.times
-                    };
-                }
-            });
-
-            // Calculate guess rate and convert to array
-            const stats = Object.values(merged).map(item => ({
-                ...item,
-                total: item.correct + item.incorrect,
-                guessRate: Math.round((item.correct / (item.correct + item.incorrect)) * 100)
-            }));
-
-            setStatsData(stats);
-        }).catch(err => console.error("Error loading flag stats:", err));
+        axios.get(`${api.url}/api/flags/correct`, config)
+            .then(res => {
+                const data = Array.isArray(res.data) ? res.data : [];
+                setStatsData(data);
+            })
+            .catch(err => console.error("Error loading flag stats:", err));
 
     }, []);
 
@@ -86,11 +48,11 @@ const Profile = () => {
 
     // Filter for Learn tab: < 75% guess rate, sorted by rate ASC (lowest first)
     const learnData = statsData
-        .filter(item => item.guessRate < 75)
-        .sort((a, b) => a.guessRate - b.guessRate);
+        .filter(item => item.rate < 75)
+        .sort((a, b) => a.rate - b.rate);
 
     // Stats tab: all data sorted by guess rate DESC
-    const allStats = [...statsData].sort((a, b) => b.guessRate - a.guessRate);
+    const allStats = [...statsData].sort((a, b) => b.rate - a.rate);
 
     const renderStatsTable = (data, emptyMessage) => (
         <Table striped hover>
@@ -108,14 +70,14 @@ const Profile = () => {
                     <tr key={index}>
                         <td style={{ fontSize: '50px' }}>{item.flag}</td>
                         <td>{item.country}</td>
-                        <td className="text-center">{item.total}</td>
-                        <td className="text-center">{item.correct}</td>
+                        <td className="text-center">{item.times_shown}</td>
+                        <td className="text-center">{item.times_guessed}</td>
                         <td className="text-center">
                             <span style={{
-                                color: item.guessRate >= 75 ? '#28a745' : item.guessRate >= 50 ? '#ffc107' : '#dc3545',
+                                color: item.rate >= 75 ? '#28a745' : item.rate >= 50 ? '#ffc107' : '#dc3545',
                                 fontWeight: 'bold'
                             }}>
-                                {item.guessRate}%
+                                {item.rate}%
                             </span>
                         </td>
                     </tr>

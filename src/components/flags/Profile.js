@@ -46,9 +46,9 @@ const Profile = () => {
         return <div className="p-5 text-center">Loading Profile Data...</div>;
     }
 
-    // Filter for Learn tab: < 75% guess rate, sorted by rate ASC (lowest first)
+    // Filter for Learn tab: < 75% guess rate, exclude never shown, sorted by rate ASC (lowest first)
     const learnData = statsData
-        .filter(item => item.rate < 75)
+        .filter(item => item.times_shown > 0 && item.rate < 75)
         .sort((a, b) => a.rate - b.rate);
 
     // Stats tab: all data sorted by guess rate DESC
@@ -73,12 +73,16 @@ const Profile = () => {
                         <td className="text-center">{item.times_shown}</td>
                         <td className="text-center">{item.times_guessed}</td>
                         <td className="text-center">
-                            <span style={{
-                                color: item.rate >= 75 ? '#28a745' : item.rate >= 50 ? '#ffc107' : '#dc3545',
-                                fontWeight: 'bold'
-                            }}>
-                                {item.rate}%
-                            </span>
+                            {item.times_shown > 0 ? (
+                                <span style={{
+                                    color: item.rate >= 75 ? '#28a745' : item.rate >= 50 ? '#ffc107' : '#dc3545',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {item.rate}%
+                                </span>
+                            ) : (
+                                <span className="text-muted">n/a</span>
+                            )}
                         </td>
                     </tr>
                 )) : <tr><td colSpan="5" className="text-center text-muted">{emptyMessage}</td></tr>}

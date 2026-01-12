@@ -320,11 +320,11 @@ class FlagsApi extends React.Component {
                 
             </Container>
                 <div style={{'display' : 'flex', 'margin-top' : '25px', 'justify-content' : 'center'}}>
+                    <Button variant="outline-secondary" onClick={() => this.exitGame()}>
+                        QUIT
+                    </Button>&nbsp;
                     <Button variant="outline-secondary" onClick={() => this.restartGame()}>
                         RESTART
-                    </Button>&nbsp;
-                    <Button variant="outline-secondary" onClick={() => this.redirectToProfile()}>
-                        PROFILE
                     </Button>
                 </div>
         </div>
@@ -333,12 +333,13 @@ class FlagsApi extends React.Component {
     redirect = () => {
         this.gameOver();
         this.props.dispatch({type : 'reset'});
-        this.props.history.push('/main');
+        this.props.history.push('/');
     }
 
-    redirectToProfile = () => {
+    exitGame = () => {
         this.gameOver();
-        this.props.history.push('/profile');
+        this.props.dispatch({type : 'reset'});
+        this.props.history.push('/');
     }
 }
 

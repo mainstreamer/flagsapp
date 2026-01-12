@@ -8,8 +8,10 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Alert from "react-bootstrap/Alert";
+import { useHistory } from 'react-router-dom';
 
 const Profile = () => {
+    const history = useHistory();
     const [key, setKey] = useState('learn');
     const [user, setUser] = useState(null);
     const [statsData, setStatsData] = useState([]);
@@ -90,10 +92,30 @@ const Profile = () => {
         </Table>
     );
 
+    const handleClose = () => {
+        history.push('/');
+    };
+
     return (
         <div style={{ minHeight: '100vh', margin: '0px', padding: '0px' }}>
             <Card>
-                <div style={{ display: 'flex', alignItems: 'center', padding: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '1rem', position: 'relative' }}>
+                    <button
+                        onClick={handleClose}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '1.5rem',
+                            cursor: 'pointer',
+                            opacity: 0.5
+                        }}
+                        aria-label="Close"
+                    >
+                        &times;
+                    </button>
                     <Card.Img
                         variant="left"
                         src={user.telegramPhotoUrl}

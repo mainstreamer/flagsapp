@@ -65,19 +65,32 @@ const Home = () => {
                             <h1><span role="img" aria-label="checkered flag">🏁</span> Flags Quiz</h1>
                             <p>Test your geography knowledge and compete for the top spot!</p>
                             {isLoggedIn ? (
-                                <Button
-                                    variant="success"
-                                    size="lg"
-                                    onClick={handlePlay}
-                                >
-                                    Play
-                                </Button>
+                                <>
+                                    <Button
+                                        variant="outline-secondary"
+                                        size="lg"
+                                        onClick={handlePlay}
+                                        style={{ textTransform: 'uppercase' }}
+                                    >
+                                        Play
+                                    </Button>
+                                    {' '}
+                                    <Button
+                                        variant="outline-secondary"
+                                        size="lg"
+                                        onClick={() => history.push('/profile')}
+                                        style={{ textTransform: 'uppercase' }}
+                                    >
+                                        Profile
+                                    </Button>
+                                </>
                             ) : (
                                 <Button
-                                    variant="success"
+                                    variant="outline-secondary"
                                     size="lg"
                                     onClick={oauthLogin}
                                     disabled={isLoading}
+                                    style={{ textTransform: 'uppercase' }}
                                 >
                                     {isLoading ? 'Logging in...' : 'Login to Play'}
                                 </Button>

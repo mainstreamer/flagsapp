@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./styles.css";
 import axios from "../../config/Axios";
-import Card from "react-bootstrap/Card";
 import api from "../../config/Api";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -23,15 +22,21 @@ const Home = () => {
         if (!token) return false;
 
         const expiresAt = localStorage.getItem('tokenExpiresAt');
-        if (expiresAt) {
-            // Check if token is expired (with 60s buffer)
-            if (Date.now() >= parseInt(expiresAt) - 60000) {
-                // Token expired, clear it
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('tokenExpiresAt');
-                return false;
-            }
+
+        // Token exists but no expiration - legacy token, treat as expired
+        if (!expiresAt) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            return false;
+        }
+
+        // Check if token is expired (with 60s buffer)
+        if (Date.now() >= parseInt(expiresAt) - 60000) {
+            // Token expired, clear it
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('tokenExpiresAt');
+            return false;
         }
 
         return true;
@@ -67,9 +72,9 @@ const Home = () => {
                             {isLoggedIn ? (
                                 <>
                                     <Button
-                                        variant="outline-secondary"
                                         size="lg"
                                         onClick={handlePlay}
+                                        className="btn-cta"
                                         style={{ textTransform: 'uppercase' }}
                                     >
                                         Play
@@ -86,10 +91,10 @@ const Home = () => {
                                 </>
                             ) : (
                                 <Button
-                                    variant="outline-secondary"
                                     size="lg"
                                     onClick={oauthLogin}
                                     disabled={isLoading}
+                                    className="btn-cta"
                                     style={{ textTransform: 'uppercase' }}
                                 >
                                     {isLoading ? 'Logging in...' : 'Login to Play'}
@@ -100,72 +105,66 @@ const Home = () => {
                 </Row>
 
                 {/* Leaderboard Section */}
-                <Row>
-                    <Col xs={12} lg={10} className="mx-auto">
-                        <Card>
-                            <Card.Header as="h3" className="text-center">
-                                High Scores
-                            </Card.Header>
-                            <Card.Body>
-                                {loading ? (
-                                    <div className="text-center py-5">Loading leaderboard...</div>
-                                ) : leaderboard.length === 0 ? (
-                                    <p className="text-center text-muted">No scores yet. Be the first to play!</p>
-                                ) : (
-                                    <Table striped hover responsive className="leaderboard-table">
-                                        <thead>
-                                            <tr>
-                                                <th className="text-center">Rank</th>
-                                                <th>Player</th>
-                                                <th className="text-center">Top Score</th>
-                                                <th className="text-center">Best Time</th>
-                                                <th className="text-center">Games</th>
-                                                <th className="text-center">Time Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {leaderboard.map((player, index) => {
-                                                const rank = index + 1;
-                                                let medal = null;
-                                                if (rank === 1) medal = <span role="img" aria-label="gold medal">🥇 </span>;
-                                                else if (rank === 2) medal = <span role="img" aria-label="silver medal">🥈 </span>;
-                                                else if (rank === 3) medal = <span role="img" aria-label="bronze medal">🥉 </span>;
+                {loading ? (
+                    <div className="text-center py-5">Loading leaderboard...</div>
+                ) : leaderboard.length === 0 ? (
+                    <p className="text-center text-muted">No scores yet. Be the first to play!</p>
+                ) : (
+                    <Table striped hover responsive className="leaderboard-table" style={{ width: '100%' }}>
+                        <thead>
+                            <tr>
+                                <th colSpan="6" className="text-center" style={{ fontSize: '1.5rem', padding: '1rem' }}>
+                                    High Scores
+                                </th>
+                            </tr>
+                            <tr>
+                                <th className="text-center">Rank</th>
+                                <th>Player</th>
+                                <th className="text-center">Top Score</th>
+                                <th className="text-center">Best Time</th>
+                                <th className="text-center">Games</th>
+                                <th className="text-center">Time Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {leaderboard.map((player, index) => {
+                                const rank = index + 1;
+                                let medal = null;
+                                if (rank === 1) medal = <span role="img" aria-label="gold medal">🥇 </span>;
+                                else if (rank === 2) medal = <span role="img" aria-label="silver medal">🥈 </span>;
+                                else if (rank === 3) medal = <span role="img" aria-label="bronze medal">🥉 </span>;
 
-                                                return (
-                                                    <tr key={index}>
-                                                        <td className="text-center rank-cell">{medal}{rank}</td>
-                                                        <td>{player.firstName}</td>
-                                                        <td className="text-center score-cell">{player.highScore}</td>
-                                                        <td className="text-center time-cell">
-                                                            {(() => {
-                                                                const totalSeconds = player.bestTime;
-                                                                const minutes = Math.floor(totalSeconds / 60);
-                                                                const seconds = totalSeconds % 60;
-                                                                const pad = (n) => String(n).padStart(2, '0');
-                                                                return `${pad(minutes)}:${pad(seconds)}`;
-                                                            })()}
-                                                        </td>
-                                                        <td className="text-center">{player.gamesTotal}</td>
-                                                        <td className="text-center time-cell">
-                                                            {(() => {
-                                                                const totalSeconds = player.timeTotal;
-                                                                const hours = Math.floor(totalSeconds / 3600);
-                                                                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                                                                const seconds = totalSeconds % 60;
-                                                                const pad = (n) => String(n).padStart(2, '0');
-                                                                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-                                                            })()}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </Table>
-                                )}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+                                return (
+                                    <tr key={index}>
+                                        <td className="text-center rank-cell">{medal}{rank}</td>
+                                        <td>{player.firstName}</td>
+                                        <td className="text-center score-cell">{player.highScore}</td>
+                                        <td className="text-center time-cell">
+                                            {(() => {
+                                                const totalSeconds = player.bestTime;
+                                                const minutes = Math.floor(totalSeconds / 60);
+                                                const seconds = totalSeconds % 60;
+                                                const pad = (n) => String(n).padStart(2, '0');
+                                                return `${pad(minutes)}:${pad(seconds)}`;
+                                            })()}
+                                        </td>
+                                        <td className="text-center">{player.gamesTotal}</td>
+                                        <td className="text-center time-cell">
+                                            {(() => {
+                                                const totalSeconds = player.timeTotal;
+                                                const hours = Math.floor(totalSeconds / 3600);
+                                                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                                                const seconds = totalSeconds % 60;
+                                                const pad = (n) => String(n).padStart(2, '0');
+                                                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+                                            })()}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                )}
             </Container>
 
             {/* Footer */}

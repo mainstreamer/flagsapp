@@ -1,0 +1,42 @@
+# Local development Dockerfile with configurable API endpoints
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json yarn.lock* package-lock.json* ./
+
+# Install dependencies
+RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    else npm install; fi
+
+# Copy source code
+COPY . .
+
+# Build arguments for API endpoints
+ARG REACT_APP_API_URL=https://localhost:4430
+ARG REACT_APP_AUTH_URL=https://localhost:8548
+ARG APP_VERSION="local"
+
+# Set environment variables for build
+ENV NODE_OPTIONS=--openssl-legacy-provider
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+ENV REACT_APP_AUTH_URL=${REACT_APP_AUTH_URL}
+ENV REACT_APP_VERSION=${APP_VERSION}
+
+# Build the production bundle
+RUN if [ -f yarn.lock ]; then yarn build; else npm run build; fi
+
+# Stage 2: Serve with Caddy
+FROM caddy:2-alpine
+
+# Copy built files from builder stage
+COPY --from=builder /app/build /srv
+
+# Copy Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
+
+EXPOSE 80
+
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]

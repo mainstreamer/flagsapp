@@ -9,16 +9,36 @@ import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import { useOAuth } from '../../hooks/useOAuth';
 import Button from "react-bootstrap/Button";
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { login: oauthLogin, isLoading } = useOAuth();
+    const history = useHistory();
+
+    const isTokenValid = () => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return false;
+
+        const expiresAt = localStorage.getItem('tokenExpiresAt');
+        if (expiresAt) {
+            // Check if token is expired (with 60s buffer)
+            if (Date.now() >= parseInt(expiresAt) - 60000) {
+                // Token expired, clear it
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('tokenExpiresAt');
+                return false;
+            }
+        }
+
+        return true;
+    };
 
     useEffect(() => {
-        // Debug: Check authentication status
-        const token = localStorage.getItem('accessToken');
-        console.log('Current auth token:', token ? 'Present' : 'Missing');
+        setIsLoggedIn(isTokenValid());
 
         axios.get(api.url + '/api/flags/scores')
             .then(res => {
@@ -31,6 +51,10 @@ const Home = () => {
             });
     }, []);
 
+    const handlePlay = () => {
+        history.push('/flagsapi');
+    };
+
     return (
         <>
             <Container className="py-5">
@@ -40,14 +64,24 @@ const Home = () => {
                         <div className="home-hero">
                             <h1><span role="img" aria-label="checkered flag">🏁</span> Flags Quiz</h1>
                             <p>Test your geography knowledge and compete for the top spot!</p>
-                            <Button
-                                variant="success"
-                                size="lg"
-                                onClick={oauthLogin}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Logging in...' : 'Login to Play'}
-                            </Button>
+                            {isLoggedIn ? (
+                                <Button
+                                    variant="success"
+                                    size="lg"
+                                    onClick={handlePlay}
+                                >
+                                    Play
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="success"
+                                    size="lg"
+                                    onClick={oauthLogin}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Logging in...' : 'Login to Play'}
+                                </Button>
+                            )}
                         </div>
                     </Col>
                 </Row>

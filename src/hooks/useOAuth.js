@@ -38,6 +38,12 @@ export const useOAuth = () => {
         localStorage.setItem('accessToken', event.data.access_token);
         localStorage.setItem('refreshToken', event.data.refresh_token);
 
+        // Store expiration time if provided
+        if (event.data.expires_in) {
+          const expiresAt = Date.now() + (event.data.expires_in * 1000);
+          localStorage.setItem('tokenExpiresAt', expiresAt.toString());
+        }
+
         // Set axios default header
         axios.defaults.headers.common = {
           'Authorization': `Bearer ${event.data.access_token}`

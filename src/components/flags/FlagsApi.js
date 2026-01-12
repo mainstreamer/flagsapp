@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 class FlagsApi extends React.Component {
 
     gameEnded = false;
+    answerLocked = false;
 
     async handleClick(action) {
         if (action === 'api') {
@@ -56,6 +57,9 @@ class FlagsApi extends React.Component {
 
     async answer(action) {
         if (this.props.lifes == 0) { return; }
+        if (this.answerLocked) { return; }
+
+        this.answerLocked = true;
 
         if (action === this.props.answer) {
             this.saveAnswer(true);
@@ -110,6 +114,7 @@ class FlagsApi extends React.Component {
     
     async startGame() {
         this.gameEnded = false;
+        this.answerLocked = false;
         this.stopTimer();
         await this.handleClick('api').then(() => this.startTimer()).then(() => this.prepareStat());
     }
@@ -120,7 +125,9 @@ class FlagsApi extends React.Component {
                     this.restartTimer();
                 }
             ).then(() => this.prepareStat())
-        ;
+            .then(() => {
+                this.answerLocked = false;
+            });
     }
     
     async gameOver() {

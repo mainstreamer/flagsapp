@@ -105,12 +105,14 @@ const Profile = () => {
                         style={{
                             position: 'absolute',
                             top: '10px',
-                            right: '10px',
+                            right: '15px',
                             background: 'none',
                             border: 'none',
-                            fontSize: '1.5rem',
+                            fontSize: '2rem',
+                            fontWeight: 'bold',
                             cursor: 'pointer',
-                            opacity: 0.5
+                            opacity: 0.7,
+                            lineHeight: 1
                         }}
                         aria-label="Close"
                     >

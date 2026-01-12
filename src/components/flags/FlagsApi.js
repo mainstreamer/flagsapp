@@ -23,6 +23,10 @@ class FlagsApi extends React.Component {
     gameEnded = false;
     answerLocked = false;
 
+    state = {
+        loading: true
+    };
+
     async handleClick(action) {
         if (action === 'api') {
             const res = await axios.get(api.url+'/api/flags/test');
@@ -115,8 +119,12 @@ class FlagsApi extends React.Component {
     async startGame() {
         this.gameEnded = false;
         this.answerLocked = false;
+        this.setState({ loading: true });
         this.stopTimer();
-        await this.handleClick('api').then(() => this.startTimer()).then(() => this.prepareStat());
+        await this.handleClick('api')
+            .then(() => this.startTimer())
+            .then(() => this.prepareStat())
+            .then(() => this.setState({ loading: false }));
     }
 
     async showFlags() {
@@ -249,6 +257,10 @@ class FlagsApi extends React.Component {
     }
     
     render() {
+        if (this.state.loading) {
+            return <div className="p-5 text-center">Fetching question...</div>;
+        }
+
         return (
             <div>
             {/*//     <Container style={{ 'display' : 'flex', 'justify-content' : 'center', width: '600px'}}>*/}
@@ -301,7 +313,9 @@ class FlagsApi extends React.Component {
                             'margin' : '10px',
                             'margin-bottom' : '0px'
                         }}>
-                            <span>{this.props.text}&nbsp;</span>
+                            <span className={this.props.text.includes('RIGHT') ? 'feedback-correct' : this.props.text.includes('NO') ? 'feedback-incorrect' : ''}>
+                                {this.props.text}&nbsp;
+                            </span>
                             <span>Total time: {this.props.sessionTimer}</span>
                         </div>
                         <div style={{

@@ -313,7 +313,7 @@ class FlagsApi extends React.Component {
                             'margin' : '10px',
                             'margin-bottom' : '0px'
                         }}>
-                            <span className={this.props.text.includes('RIGHT') ? 'feedback-correct' : this.props.text.includes('NO') ? 'feedback-incorrect' : ''}>
+                            <span className={(this.props.text || '').includes('RIGHT') ? 'feedback-correct' : (this.props.text || '').includes('NO') ? 'feedback-incorrect' : ''}>
                                 {this.props.text}&nbsp;
                             </span>
                             <span>Total time: {this.props.sessionTimer}</span>

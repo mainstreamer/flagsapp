@@ -4,17 +4,14 @@ services:
       context: .
       dockerfile: Dockerfile.local
       args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL:-https://localhost:4430}
-        REACT_APP_AUTH_URL: ${REACT_APP_AUTH_URL:-https://localhost:8548}
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8000}
+        REACT_APP_AUTH_URL: ${REACT_APP_AUTH_URL:-http://localhost:8547}
     container_name: flagsapp-local
     ports:
       - "3001:80"
     networks:
       - backend-flags
       - openid_network
-    environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL:-https://localhost:4430}
-      - REACT_APP_AUTH_URL=${REACT_APP_AUTH_URL:-https://localhost:8548}
 
 networks:
   backend-flags:

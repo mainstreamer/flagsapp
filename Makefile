@@ -15,8 +15,10 @@ help: ## Show this help message
 install: ## Install dependencies
 	@yarn install
 
-dev: ## Start development server (yarn start)
+dev: ## Start development server at http://localhost:3000
 	@echo "Starting dev server at http://localhost:3000"
+	@echo "Using API: $${REACT_APP_API_URL:-http://localhost:8000}"
+	@echo "Using Auth: $${REACT_APP_AUTH_URL:-http://localhost:8547}"
 	@yarn start
 
 build: ## Build production bundle

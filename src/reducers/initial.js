@@ -136,10 +136,24 @@ const initial = (state, action) => {
     }
 }
 
-export default (state = () =>
-    new Map({
-        counter : 0
-    }), action) => {
+const defaultState = {
+    'counter' : 0,
+    'text' : 'no data',
+    'flags' : {},
+    'flagi' : {},
+    'ques' : 'ques',
+    'answer' : '-',
+    'answerCode' : '',
+    'token' : '',
+    'lifes' : 3,
+    'lifesIcon' : '🟢🟢🟢',
+    'timer' : 15,
+    'maxTimer' : 15,
+    'interval' : '',
+    'sessionTimer' : 0,
+};
+
+export default (state = defaultState, action) => {
     switch (action.type) {
         case 'add': return add(state);
         case 'initial': return  initial(state);

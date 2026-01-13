@@ -14,6 +14,7 @@ const Home = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const { login: oauthLogin, isLoading } = useOAuth();
     const history = useHistory();
 
@@ -60,13 +61,62 @@ const Home = () => {
         history.push('/flagsapi');
     };
 
+    const handleLogoutClick = () => {
+        setShowLogoutPopup(true);
+    };
+
+    const handleLogoutConfirm = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('tokenExpiresAt');
+        setIsLoggedIn(false);
+        setShowLogoutPopup(false);
+    };
+
+    const handleLogoutCancel = () => {
+        setShowLogoutPopup(false);
+    };
+
     return (
-        <>
-            <Container className="py-5">
+        <div className="page-wrapper">
+            {/* Logout Confirmation Popup */}
+            {showLogoutPopup && (
+                <div className="popup-overlay" onClick={handleLogoutCancel}>
+                    <div className="popup-content" onClick={e => e.stopPropagation()}>
+                        <p>Logout?</p>
+                        <div className="popup-buttons">
+                            <Button
+                                variant="outline-secondary"
+                                onClick={handleLogoutConfirm}
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                variant="outline-secondary"
+                                onClick={handleLogoutCancel}
+                            >
+                                No
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <Container className="py-5 main-content">
                 {/* Hero Section */}
                 <Row className="mb-5">
                     <Col xs={12} md={8} lg={6} className="mx-auto">
                         <div className="home-hero">
+                            {isLoggedIn && (
+                                <button
+                                    onClick={handleLogoutClick}
+                                    className="close-btn"
+                                    aria-label="Logout"
+                                    title="Logout"
+                                >
+                                    &times;
+                                </button>
+                            )}
                             <h1><span role="img" aria-label="checkered flag">🏁</span> Flags Quiz</h1>
                             <p>Test your geography knowledge and compete for the top spot!</p>
                             {isLoggedIn ? (
@@ -185,7 +235,7 @@ const Home = () => {
                     </div>
                 </Container>
             </footer>
-        </>
+        </div>
     )
 }
 

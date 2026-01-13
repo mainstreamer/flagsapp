@@ -1,9 +1,9 @@
-import React from 'react';
+BOBBOBOBBOimOAOAOOO:port React from 'react';
 import { connect } from 'react-redux'
 import TelegramLoginButton, { TelegramUser } from 'telegram-login-button'
 import { Link } from 'react-router-dom';
 import { useDispatch, useStore } from 'react-redux'
-import axios from "../../config/Axios";
+import axiOAos from "../../config/Axios";
 import "./styles.css";
 import Button from 'react-bootstrap/Button';
 import Jumbotron from 'react-bootstrap/Jumbotron';
@@ -267,7 +267,7 @@ class FlagsApi extends React.Component {
             <Container fluid style={{ 'display' : 'flex', 'justify-content' : 'center'}}>
 
                 {/*<Toast show={true} style={{ width: '410px', margin: 'auto', marginTop: '10%' }}>*/}
-                <Toast show={true} className="game-toast" onClose={this.redirect}>
+                <Toast show={true} style={{ 'flex-basis': '400px', 'max-width' : '400px', 'min-height' : '300px' }} onClose={this.redirect}>
                     <Toast.Header>
                         <strong className="mr-auto">Question:</strong>
                     </Toast.Header>
@@ -313,11 +313,9 @@ class FlagsApi extends React.Component {
                             'margin' : '10px',
                             'margin-bottom' : '0px'
                         }}>
-                            <div className="feedback-container">
-                                <span className={(this.props.text || '').includes('RIGHT') ? 'feedback-correct' : (this.props.text || '').includes('NO') ? 'feedback-incorrect' : ''}>
-                                    {this.props.text}&nbsp;
-                                </span>
-                            </div>
+                            <span className={this.props.text.includes('RIGHT') ? 'feedback-correct' : this.props.text.includes('NO') ? 'feedback-incorrect' : ''}>
+                                {this.props.text}&nbsp;
+                            </span>
                             <span>Total time: {this.props.sessionTimer}</span>
                         </div>
                         <div style={{

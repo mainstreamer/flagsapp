@@ -9,6 +9,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Alert from "react-bootstrap/Alert";
 import { useHistory } from 'react-router-dom';
+import "../home/styles.css";
 
 const Profile = () => {
     const history = useHistory();
@@ -102,18 +103,7 @@ const Profile = () => {
                 <div style={{ display: 'flex', alignItems: 'center', padding: '1rem', position: 'relative' }}>
                     <button
                         onClick={handleClose}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '15px',
-                            background: 'none',
-                            border: 'none',
-                            fontSize: '2rem',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            opacity: 0.7,
-                            lineHeight: 1
-                        }}
+                        className="close-btn"
                         aria-label="Close"
                     >
                         &times;

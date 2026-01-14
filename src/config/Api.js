@@ -1,7 +1,5 @@
 const api = {
-    'url' : 'https://api.flags.izeebot.top',
-    // 'mode' : 'prod',
-    // 'mode' : 'dev'
+    url: process.env.REACT_APP_API_URL || 'http://localhost:8000',
 };
 
 export default api;

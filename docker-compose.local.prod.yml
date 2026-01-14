@@ -1,0 +1,12 @@
+services:
+  react:
+    build:
+      target: production # <--- Switches to the Caddy stage
+      args:
+        # Bakes your LOCAL ports into the production build
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:3001}
+        - REACT_APP_AUTH_URL=${REACT_APP_AUTH_URL:-http://localhost:8547}
+    container_name: flags-local-prod
+    ports:
+      - "3001:80" # Run on 3001 so it doesn't clash with your dev server
+    volumes: !reset [] # Wipes the dev volumes (no code mounting!)

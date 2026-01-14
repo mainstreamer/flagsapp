@@ -15,53 +15,51 @@ export const useOAuth = () => {
     const left = window.screen.width / 2 - width / 2;
     const top = window.screen.height / 2 - height / 2;
 
+    // Open popup to backend login endpoint
+    // Backend handles OAuth flow and token exchange securely
     const popup = window.open(
-      api.url + '/login?popup=1',
+      `${api.url}/login`,
       'OAuth Login',
       `width=${width},height=${height},left=${left},top=${top}`
     );
 
     const handleMessage = (event) => {
-      // Debug logging
-      console.log('OAuth message received:', event.origin, event.data);
-
-      // Verify origin
-      if (event.origin !== api.url) {
-        console.warn('OAuth message from incorrect origin:', event.origin, 'expected:', api.url);
+      // Only handle oauth_success messages
+      if (!event.data || event.data.type !== 'oauth_success') {
         return;
       }
 
-      if (event.data.type === 'oauth_success') {
-        console.log('OAuth success! Storing tokens...');
+      console.log('OAuth success received from backend');
 
-        // Store tokens
-        localStorage.setItem('accessToken', event.data.access_token);
-        localStorage.setItem('refreshToken', event.data.refresh_token);
+      const { access_token, refresh_token, expires_in } = event.data;
 
-        // Store expiration time if provided
-        if (event.data.expires_in) {
-          const expiresAt = Date.now() + (event.data.expires_in * 1000);
-          localStorage.setItem('tokenExpiresAt', expiresAt.toString());
-        }
-
-        // Set axios default header
-        axios.defaults.headers.common = {
-          'Authorization': `Bearer ${event.data.access_token}`
-        };
-
-        console.log('Token stored, redirecting to game...');
-
-        setIsLoading(false);
-        if (popup) popup.close();
-
-        // Clean up
-        window.removeEventListener('message', handleMessage);
-
-        // Redirect to flags page
-        history.push('/flagsapi');
-      } else {
-        console.warn('Unexpected OAuth message type:', event.data.type);
+      // Store tokens
+      localStorage.setItem('accessToken', access_token);
+      if (refresh_token) {
+        localStorage.setItem('refreshToken', refresh_token);
       }
+
+      // Store expiration time if provided
+      if (expires_in) {
+        const expiresAt = Date.now() + (expires_in * 1000);
+        localStorage.setItem('tokenExpiresAt', expiresAt.toString());
+      }
+
+      // Set axios default header
+      axios.defaults.headers.common = {
+        'Authorization': `Bearer ${access_token}`
+      };
+
+      console.log('Token stored, redirecting to game...');
+
+      setIsLoading(false);
+      if (popup) popup.close();
+
+      // Clean up
+      window.removeEventListener('message', handleMessage);
+
+      // Redirect to flags page
+      history.push('/flagsapi');
     };
 
     window.addEventListener('message', handleMessage);

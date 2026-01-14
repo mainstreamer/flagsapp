@@ -1,7 +1,29 @@
 services:
-  flagsapp:
-    build: .
-    container_name: flagsapp
+  react:
+    build:
+      context: .
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+      target: development # <--- Forces it to stop at the Node dev server
+    container_name: flags-dev
     ports:
-      - "80:80"
-    restart: unless-stopped
+      - "3000:3000"
+    volumes:
+      - .:/app:rw,Z
+      - /app/node_modules # Prevents host modules from breaking container
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true # Essential for Linux hot-reload
+      - WATCHPACK_POLLING=true    # Double-down on polling for CRA/Webpack
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_AUTH_URL=http://localhost:8547
+    networks:
+      - backend-flags
+      - openid_network
+
+networks:
+  backend-flags:
+    external: true
+  openid_network:
+    external: true

@@ -36,11 +36,13 @@ CMD ["npm", "start"]
 # --- Stage 3: Builder (Compilation) ---
 FROM base AS builder
 COPY . .
-# Args to bake URLs into the JS bundle
+# Args to bake URLs and version into the JS bundle
 ARG REACT_APP_API_URL
 ARG REACT_APP_AUTH_URL
+ARG APP_VERSION
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 ENV REACT_APP_AUTH_URL=$REACT_APP_AUTH_URL
+ENV REACT_APP_VERSION=$APP_VERSION
 ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN if [ -f yarn.lock ]; then yarn build; else npm run build; fi
 

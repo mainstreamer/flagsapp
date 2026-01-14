@@ -109,6 +109,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             APP_VERSION=v${{ needs.version.outputs.new_version }}
+            REACT_APP_API_URL=${{ vars.REACT_APP_API_URL }}
+            REACT_APP_AUTH_URL=${{ vars.REACT_APP_AUTH_URL }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 

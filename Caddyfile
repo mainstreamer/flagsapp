@@ -1,23 +1,25 @@
 :80 {
-    root * /srv
+    root * /usr/share/caddy
 
-    # Enable gzip compression
-    encode gzip
+    # Enable compression
+    encode zstd gzip
 
-    # SPA fallback - serve index.html for client-side routing
-    try_files {path} /index.html
-
-    file_server
-
-    # Cache static assets
+    # 1. Hashed Assets: Cache forever
+    # IMPROVEMENT: Match files inside /static/ folders specifically
+    # CRA/Vite usually puts hashed assets in /static/js or /assets/
     @static {
         path *.js *.css *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2
     }
     header @static Cache-Control "public, max-age=31536000, immutable"
 
-    # Don't cache index.html
+    # 2. HTML & Service Workers: Never cache
     @html {
-        path *.html
+        path *.html sw.js
     }
     header @html Cache-Control "no-cache, no-store, must-revalidate"
+
+    # SPA fallback
+    try_files {path} /index.html
+
+    file_server
 }

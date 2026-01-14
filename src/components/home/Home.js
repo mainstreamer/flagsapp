@@ -102,10 +102,10 @@ const Home = () => {
                 </div>
             )}
 
-            <Container className="py-5 main-content">
+            <Container fluid className="px-0 main-content">
                 {/* Hero Section */}
-                <Row className="mb-5">
-                    <Col xs={12} md={8} lg={6} className="mx-auto">
+                <Row className="mb-0">
+                    <Col xs={12}>
                         <div className="home-hero">
                             {isLoggedIn && (
                                 <button

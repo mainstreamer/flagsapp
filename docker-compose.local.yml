@@ -8,10 +8,18 @@ services:
         REACT_APP_AUTH_URL: ${REACT_APP_AUTH_URL:-http://localhost:8547}
     container_name: flagsapp-local
     ports:
-      - "3001:80"
+      - "3000:3000"
     networks:
       - backend-flags
       - openid_network
+    volumes:
+      - .:/app
+      - /app/node_modules # Anonymous volume to protect container modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Essential for HMR on some OS (Fedora/Windows)
+      - WATCHPACK_POLLING=true    # For newer Webpack/Vite versions
+    stdin_open: true # Keeps the terminal active
+    tty: true
 
 networks:
   backend-flags:

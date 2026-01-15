@@ -4,6 +4,30 @@ body {
     padding: 0!important;
 }
 
+/* Game wrapper and container */
+.game-wrapper {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.game-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+@media (max-width: 520px) {
+    .game-wrapper {
+        padding: 0;
+        margin: 0;
+    }
+
+    .game-container {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+
 h1 {
     color: red;
 }
@@ -55,6 +79,13 @@ h1 {
     max-width: 900px;
 }
 
+@media (max-width: 520px) {
+    .toast.game-toast {
+        max-width: none !important;
+        width: 100% !important;
+    }
+}
+
 /* Game area toast - responsive width */
 .game-toast {
     width: 100%;
@@ -65,9 +96,27 @@ h1 {
 
 @media (max-width: 520px) {
     .game-toast {
-        max-width: 100%;
-        width: 100%;
-        border-radius: 0;
+        max-width: 100% !important;
+        width: 100% !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        flex-basis: 100% !important;
+    }
+
+    .game-toast.toast {
+        max-width: 100% !important;
+    }
+
+    .game-toast .toast-header {
+        border-radius: 0 !important;
+    }
+
+    .fade.toast.game-toast.show {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
     }
 }
 
@@ -87,10 +136,24 @@ h1 {
     padding-top: 0;
 }
 
+@media (max-width: 520px) {
+    .game-toast .toast-body {
+        padding: 0 !important;
+    }
+}
+
 div.container-fluid {
-    margin: 0;
-    padding: 0;
-    max-width: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+}
+
+@media (max-width: 520px) {
+    div.container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
 div.col-12 {
     max-width: 100%;
@@ -193,4 +256,28 @@ td:nth-of-type(2){
     font-weight: bold;
     color: #6c757d;
     cursor: pointer;
+}
+
+/* Game action buttons */
+.game-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 25px;
+    padding: 0 5px;
+}
+
+.game-buttons .btn-pause {
+    width: 120px;
+}
+
+@media (max-width: 520px) {
+    .game-buttons {
+        margin-top: 15px;
+        padding: 0 5px;
+    }
+
+    .game-buttons .btn-pause {
+        width: 120px;
+    }
 }

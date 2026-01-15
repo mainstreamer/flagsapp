@@ -18,15 +18,28 @@ const Home = () => {
     const { login: oauthLogin, isLoading } = useOAuth();
     const history = useHistory();
 
+    // Check if animation should be shown (once per day)
+    const shouldShowAnimation = () => {
+        const lastAnimDate = localStorage.getItem('homeAnimationDate');
+        const today = new Date().toDateString();
+        if (lastAnimDate === today) {
+            return false;
+        }
+        return true;
+    };
+
+    const [skipAnimation] = useState(!shouldShowAnimation());
+
     // Animation states
-    const [animPhase, setAnimPhase] = useState(0);
+    const [animPhase, setAnimPhase] = useState(skipAnimation ? 7 : 0);
     // Phase 0: blank
     // Phase 1: title visible
     // Phase 2: description visible
     // Phase 3: table slides in (blurred)
     // Phase 4: "High Scores" bounces in
     // Phase 5: rows unblur from bottom (except top)
-    // Phase 6: top scorer revealed + buttons visible
+    // Phase 6: buttons visible (top scorer still blurred)
+    // Phase 7: top scorer revealed
     const [revealedRows, setRevealedRows] = useState([]);
 
     const isTokenValid = () => {
@@ -72,6 +85,14 @@ const Home = () => {
     useEffect(() => {
         if (loading) return;
 
+        // Skip animation if already shown today
+        if (skipAnimation) {
+            // Reveal all rows immediately
+            const allRows = Array.from({ length: Math.min(leaderboard.length, 10) }, (_, i) => i);
+            setRevealedRows(allRows);
+            return;
+        }
+
         const timers = [];
 
         // Phase 1: Title appears (after 300ms)
@@ -99,15 +120,22 @@ const Home = () => {
             }
         }, 3600));
 
-        // Phase 6: Top scorer + buttons (after all rows revealed + pause)
+        // Phase 6: Buttons appear (after all rows revealed + pause, top scorer still blurred)
         const totalRowDelay = Math.max(0, leaderboard.length - 1) * 200;
         timers.push(setTimeout(() => {
-            setRevealedRows(prev => [...prev, 0]);
             setAnimPhase(6);
-        }, 3600 + totalRowDelay + 1500));
+        }, 3600 + totalRowDelay + 1000));
+
+        // Phase 7: Top scorer revealed (after buttons appear)
+        timers.push(setTimeout(() => {
+            setRevealedRows(prev => [...prev, 0]);
+            setAnimPhase(7);
+            // Store today's date so animation won't show again today
+            localStorage.setItem('homeAnimationDate', new Date().toDateString());
+        }, 3600 + totalRowDelay + 1800));
 
         return () => timers.forEach(t => clearTimeout(t));
-    }, [loading, leaderboard.length]);
+    }, [loading, leaderboard.length, skipAnimation]);
 
     const handlePlay = () => {
         history.push('/flagsapi');
@@ -130,7 +158,7 @@ const Home = () => {
     };
 
     return (
-        <div className={`page-wrapper ${animPhase < 6 ? 'animating' : ''}`}>
+        <div className={`page-wrapper ${animPhase < 7 ? 'animating' : ''}`}>
             {/* Logout Confirmation Popup */}
             {showLogoutPopup && (
                 <div className="popup-overlay" onClick={handleLogoutCancel}>
@@ -159,7 +187,7 @@ const Home = () => {
                 <Row className="mb-0">
                     <Col xs={12}>
                         <div className="home-hero">
-                            {isLoggedIn && animPhase >= 6 && (
+                            {isLoggedIn && animPhase >= 7 && (
                                 <button
                                     onClick={handleLogoutClick}
                                     className="close-btn"

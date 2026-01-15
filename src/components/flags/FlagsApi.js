@@ -275,11 +275,8 @@ class FlagsApi extends React.Component {
         }
 
         return (
-            <div>
-            {/*//     <Container style={{ 'display' : 'flex', 'justify-content' : 'center', width: '600px'}}>*/}
-            <Container fluid style={{ 'display' : 'flex', 'justify-content' : 'center'}}>
-
-                {/*<Toast show={true} style={{ width: '410px', margin: 'auto', marginTop: '10%' }}>*/}
+            <div className="game-wrapper">
+            <Container fluid className="game-container">
                 <Toast show={true} className="game-toast" onClose={this.redirect}>
                     <Toast.Header>
                         <strong className="mr-auto">Question:</strong>
@@ -314,7 +311,7 @@ class FlagsApi extends React.Component {
                         }
                         {this.state.paused && (
                             <div className="pause-overlay" onClick={this.togglePause}>
-                                PAUSED - Click to Resume
+                                PAUSED
                             </div>
                         )}
                         </div>
@@ -350,7 +347,7 @@ class FlagsApi extends React.Component {
                 {/*<button onClick={ () => this.submitScore(4)}>PEW</button>*/}
                 
             </Container>
-                <div style={{'display' : 'flex', 'margin-top' : '25px', 'justify-content' : 'center', 'gap' : '8px'}}>
+                <div className="game-buttons">
                     <Button variant="outline-secondary" onClick={() => this.exitGame()}>
                         QUIT
                     </Button>
@@ -361,8 +358,9 @@ class FlagsApi extends React.Component {
                         variant="outline-secondary"
                         onClick={this.togglePause}
                         disabled={this.props.lifes <= 0}
+                        className="btn-pause"
                     >
-                        {this.state.paused ? '▶ PLAY' : '❚❚ PAUSE'}
+                        {this.state.paused ? '▶ RESUME' : '❚❚ PAUSE '}
                     </Button>
                 </div>
         </div>

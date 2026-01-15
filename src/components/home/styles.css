@@ -3,10 +3,20 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.page-wrapper.animating {
+  overflow: hidden;
+}
+
+body:has(.page-wrapper.animating) {
+  overflow: hidden;
 }
 
 .main-content {
   flex: 1;
+  overflow: hidden;
 }
 
 /* Close/Logout button */
@@ -248,4 +258,174 @@
     flex-direction: column;
     text-align: center;
   }
+}
+
+/* ===== PAGE LOAD ANIMATIONS ===== */
+
+/* Hidden state for all animated elements */
+.anim-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Title animation - fade in and scale */
+@keyframes titleAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-title-visible {
+  animation: titleAppear 0.6s ease-out forwards;
+}
+
+/* Description fade in */
+@keyframes descFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-desc-visible {
+  animation: descFadeIn 0.5s ease-out forwards;
+}
+
+/* Buttons appear */
+@keyframes buttonsAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-buttons-visible {
+  animation: buttonsAppear 0.5s ease-out forwards;
+}
+
+/* Table slide up from below (blurred) */
+@keyframes tableSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-table-hidden {
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+.anim-table-visible {
+  animation: tableSlideUp 0.8s ease-out forwards;
+}
+
+/* Hide scrollbars on table during animation */
+.table-responsive {
+  overflow: hidden !important;
+}
+
+.animating .leaderboard-table,
+.animating .table-responsive {
+  overflow: hidden !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.animating .leaderboard-table::-webkit-scrollbar,
+.animating .table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+/* High Scores bouncing text */
+@keyframes highScoresBounce {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(-10%);
+  }
+  45% {
+    transform: translateX(8%);
+  }
+  65% {
+    transform: translateX(-4%);
+  }
+  80% {
+    transform: translateX(2%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.anim-highscores-bounce {
+  animation: highScoresBounce 1.2s ease-out forwards;
+}
+
+/* Simple fade in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.anim-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Row states - blurred and revealed */
+.anim-row-blurred td {
+  filter: blur(8px);
+  transition: filter 0.4s ease-out;
+}
+
+.anim-row-revealed td {
+  filter: blur(0);
+  transition: filter 0.4s ease-out;
+}
+
+/* Top scorer special reveal */
+@keyframes topScorerReveal {
+  0% {
+    filter: blur(8px);
+    transform: scale(1);
+  }
+  50% {
+    filter: blur(0);
+    transform: scale(1.02);
+  }
+  100% {
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.leaderboard-table tbody tr:first-child.anim-row-revealed td {
+  animation: topScorerReveal 0.6s ease-out forwards;
 }

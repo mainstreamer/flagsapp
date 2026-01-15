@@ -24,24 +24,7 @@ import Home from "./components/home/Home";
 import FlagsApi from "./components/flags/FlagsApi";
 import Profile from "./components/flags/Profile";
 
-//
-// const store = storeCreator();
-//
-//
-//
-
 const store = createStore(appReducers);
-
-// function addTodo(text) {
-//   return {
-//     type: 'ADD_TODO',
-//     text
-//   }
-// }
-
-// store.dispatch(addTodo('Read the docs'))
-// store.dispatch(addTodo('Read about the middleware'))
-
 
 store.dispatch({type: 'initial'});
 // store.dispatch('add');

@@ -24,7 +24,8 @@ class FlagsApi extends React.Component {
     answerLocked = false;
 
     state = {
-        loading: true
+        loading: true,
+        paused: false
     };
 
     async handleClick(action) {
@@ -119,7 +120,7 @@ class FlagsApi extends React.Component {
     async startGame() {
         this.gameEnded = false;
         this.answerLocked = false;
-        this.setState({ loading: true });
+        this.setState({ loading: true, paused: false });
         this.stopTimer();
         await this.handleClick('api')
             .then(() => this.startTimer())
@@ -167,6 +168,35 @@ class FlagsApi extends React.Component {
         this.array = [];
         console.log('Timer stop');
     }
+
+    togglePause = () => {
+        if (this.props.lifes <= 0) return;
+
+        if (this.state.paused) {
+            this.resumeGame();
+        } else {
+            this.pauseGame();
+        }
+    }
+
+    pauseGame = () => {
+        this.stopTimer();
+        this.setState({ paused: true });
+    }
+
+    resumeGame = () => {
+        this.setState({ paused: false });
+        this.startTimerFromCurrent();
+    }
+
+    startTimerFromCurrent = () => {
+        let interval = setInterval(() => {
+            this.props.dispatch({type: 'tick'});
+            this.tickTimer();
+        }, 1000);
+
+        this.array.push(interval);
+    }
     
     tickTimer() {
         if (this.props.timer == 15) {
@@ -174,7 +204,6 @@ class FlagsApi extends React.Component {
         } else {
             if (this.props.timer == 0) {
                 this.timeout();
-                
             }
         }
     }
@@ -222,25 +251,9 @@ class FlagsApi extends React.Component {
     answers = [];
     question = [];
     prepareStat() {
-        // console.log('FOO');
-        // console.log(this.props);
-        // console.log(this.props.flags);
         this.props.flagi.map((item) =>
-            // () => alert()
             this.question.push(item)
-            // console.log(item)
-            // (item) => { alert(); console.log('xaxa' + item)}
         );
-        
-
-        // this.array.map(item => clearInterval(item));
-        
-        
-        // console.log();
-        // for (let item of this.props.flagi) {
-        //     this.question.push(item.getAllKeys()[0])
-        // }
-        // console.log(this.question);
     }
     
     saveAnswer(correct) {
@@ -275,20 +288,17 @@ class FlagsApi extends React.Component {
                         <div style={{
                             'display' : 'flex',
                             'justify-content' : 'space-between',
-                            'margin' : '0 10px'
+                            'padding' : '0 12px',
+                            'alignItems' : 'center'
                         }}>
                             <span><strong className="question-text">Select the flag of</strong></span>
                             <span>Time: <strong>{this.props.timer}</strong></span>
-
                         </div>
 
                         <h4  style={{
                             'margin' : '10px 10px'
                         }}>{this.props.ques}</h4>
-                        <span  style={{
-                            'display' : 'flex',
-                            'justify-content' : 'space-between',
-                        }}>
+                        <div className={`flags-container ${this.state.paused ? 'paused' : ''}`}>
                         {
                             this.props.flags.map(item =>
                                 (
@@ -302,7 +312,12 @@ class FlagsApi extends React.Component {
                                 )
                             )
                         }
-                        </span>
+                        {this.state.paused && (
+                            <div className="pause-overlay" onClick={this.togglePause}>
+                                PAUSED - Click to Resume
+                            </div>
+                        )}
+                        </div>
                         <Alert key={'idx'} variant={'warning'} style={this.props.lifes <= 0 ? {display: 'block'} : {display: 'none'} }>
                             <strong>GAME OVER! Your score: {this.props.counter}</strong>
                         </Alert>
@@ -335,12 +350,19 @@ class FlagsApi extends React.Component {
                 {/*<button onClick={ () => this.submitScore(4)}>PEW</button>*/}
                 
             </Container>
-                <div style={{'display' : 'flex', 'margin-top' : '25px', 'justify-content' : 'center'}}>
+                <div style={{'display' : 'flex', 'margin-top' : '25px', 'justify-content' : 'center', 'gap' : '8px'}}>
                     <Button variant="outline-secondary" onClick={() => this.exitGame()}>
                         QUIT
-                    </Button>&nbsp;
+                    </Button>
                     <Button variant="outline-secondary" onClick={() => this.restartGame()}>
                         RESTART
+                    </Button>
+                    <Button
+                        variant="outline-secondary"
+                        onClick={this.togglePause}
+                        disabled={this.props.lifes <= 0}
+                    >
+                        {this.state.paused ? '▶ PLAY' : '❚❚ PAUSE'}
                     </Button>
                 </div>
         </div>

@@ -13,16 +13,37 @@ h1 {
 }
 
 .flag {
-    font-size: 80px;
+    font-size: 64px;
     border: 3px dotted transparent;
     display: inline-block;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease, filter 0.3s;
     max-width: 100%;
+    transform: scale(1);
+}
+
+.flags-container > span {
+    display: inline-block;
+}
+
+.flags-container > span:hover .flag {
+    transform: scale(1.25) !important;
+}
+
+@media (max-width: 400px) {
+    .flag {
+        font-size: 56px;
+    }
+}
+
+@media (max-width: 350px) {
+    .flag {
+        font-size: 48px;
+    }
 }
 
 .flag:hover {
-    transform: scale(1.05);
+    transform: scale(1.25);
 }
 
 /* Don't show correct answer by default - showCorrect() will set border dynamically */
@@ -36,9 +57,18 @@ h1 {
 
 /* Game area toast - responsive width */
 .game-toast {
-    width: 90vw;
+    width: 100%;
     max-width: 500px;
     min-height: 300px;
+    margin: 0 auto;
+}
+
+@media (max-width: 520px) {
+    .game-toast {
+        max-width: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
 }
 
 @media (min-width: 576px) {
@@ -134,4 +164,33 @@ td:nth-of-type(2){
     color: #dc3545;
     font-weight: bold;
     animation: shake 0.4s ease-out;
+}
+
+/* Pause functionality */
+.flags-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.flags-container.paused .flag {
+    filter: blur(15px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.pause-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.7);
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #6c757d;
+    cursor: pointer;
 }

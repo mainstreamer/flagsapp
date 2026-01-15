@@ -16,6 +16,9 @@ body:has(.page-wrapper.animating) {
 
 .main-content {
   flex: 1;
+}
+
+.animating .main-content {
   overflow: hidden;
 }
 
@@ -341,18 +344,12 @@ body:has(.page-wrapper.animating) {
 }
 
 /* Hide scrollbars on table during animation */
-.table-responsive {
-  overflow: hidden !important;
-}
-
-.animating .leaderboard-table,
 .animating .table-responsive {
   overflow: hidden !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.animating .leaderboard-table::-webkit-scrollbar,
 .animating .table-responsive::-webkit-scrollbar {
   display: none;
 }

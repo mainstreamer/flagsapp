@@ -23,6 +23,7 @@ import Flags from "./components/flags/Flags";
 import Home from "./components/home/Home";
 import FlagsApi from "./components/flags/FlagsApi";
 import Profile from "./components/flags/Profile";
+// import TestLayout from "./components/flags/TestLayout";
 
 const store = createStore(appReducers);
 
@@ -34,6 +35,7 @@ function App() {
       <Provider store={store}>
           <Router>
               <Switch>
+                {/*<Route path="/test" component={TestLayout} />*/}
                 <Route path="/flagsapi" component={FlagsApi} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/flags" component={Flags} />

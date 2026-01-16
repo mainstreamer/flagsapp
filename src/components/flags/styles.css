@@ -62,43 +62,43 @@ h1 {
 /* Mobile - use larger size to account for iOS rendering */
 @media (max-width: 520px) {
     .flag {
-        font-size: 69px;
+        font-size: 79px;
     }
 }
 
 @media (max-width: 400px) {
     .flag {
-        font-size: 62px;
+        font-size: 72px;
     }
 }
 
 @media (max-width: 350px) {
     .flag {
-        font-size: 53px;
+        font-size: 73px;
     }
 }
 
 /* iOS Safari specific - uses -webkit-touch-callout which is iOS only */
 @supports (-webkit-touch-callout: none) {
     .flag {
-        font-size: 78px;
+        font-size: 88px;
     }
 
     @media (max-width: 520px) {
         .flag {
-            font-size: 74px;
+            font-size: 84px;
         }
     }
 
     @media (max-width: 400px) {
         .flag {
-            font-size: 67px;
+            font-size: 87px;
         }
     }
 
     @media (max-width: 350px) {
         .flag {
-            font-size: 58px;
+            font-size: 88px;
         }
     }
 }

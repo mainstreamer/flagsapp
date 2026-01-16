@@ -160,11 +160,11 @@ class FlagsApi extends React.Component {
     }
 
     async showFlags() {
-        await this.handleClick('api').then(() =>
-                {
+        await this.handleClick('api').then(() => {
+                if (!this.state.paused) {
                     this.restartTimer();
                 }
-            ).then(() => this.prepareStat())
+            }).then(() => this.prepareStat())
             .then(() => {
                 this.answerLocked = false;
             });

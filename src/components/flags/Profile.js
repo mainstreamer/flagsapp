@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import api from "../../config/Api";
 import Table from "react-bootstrap/Table";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import Alert from "react-bootstrap/Alert";
 import { useHistory } from 'react-router-dom';
 import "../home/styles.css";
 
@@ -44,48 +40,41 @@ const Profile = () => {
 
     }, []);
 
-    // Show a loader if user data hasn't arrived yet
     if (!user) {
-        return <div className="p-5 text-center">Loading Profile Data...</div>;
+        return <div className="p-5 text-center">Loading...</div>;
     }
 
-    // Filter for Learn tab: < 75% guess rate, exclude never shown, sorted by rate ASC (lowest first)
     const learnData = statsData
         .filter(item => item.times_shown > 0 && item.rate < 75)
         .sort((a, b) => a.rate - b.rate);
 
-    // Stats tab: all data sorted by guess rate DESC
     const allStats = [...statsData].sort((a, b) => b.rate - a.rate);
 
     const renderStatsTable = (data, emptyMessage) => (
-        <Table striped hover>
+        <Table striped hover size="sm">
             <thead>
                 <tr>
                     <th>Flag</th>
                     <th>Country</th>
                     <th className="text-center">Shown</th>
                     <th className="text-center">Correct</th>
-                    <th className="text-center">Guess Rate</th>
+                    <th className="text-center">Rate</th>
                 </tr>
             </thead>
             <tbody>
                 {data.length > 0 ? data.map((item, index) => (
                     <tr key={index}>
-                        <td style={{ fontSize: '50px' }}>{item.flag}</td>
+                        <td style={{ fontSize: '2rem' }}>{item.flag}</td>
                         <td>{item.country}</td>
                         <td className="text-center">{item.times_shown}</td>
                         <td className="text-center">{item.times_guessed}</td>
                         <td className="text-center">
-                            {item.times_shown > 0 ? (
-                                <span style={{
-                                    color: item.rate >= 75 ? '#28a745' : item.rate >= 50 ? '#ffc107' : '#dc3545',
-                                    fontWeight: 'bold'
-                                }}>
-                                    {item.rate}%
-                                </span>
-                            ) : (
-                                <span className="text-muted">n/a</span>
-                            )}
+                            <span style={{
+                                color: item.rate >= 75 ? '#28a745' : item.rate >= 50 ? '#ffc107' : '#dc3545',
+                                fontWeight: 'bold'
+                            }}>
+                                {item.rate}%
+                            </span>
                         </td>
                     </tr>
                 )) : <tr><td colSpan="5" className="text-center text-muted">{emptyMessage}</td></tr>}
@@ -93,68 +82,88 @@ const Profile = () => {
         </Table>
     );
 
-    const handleClose = () => {
-        history.push('/');
-    };
-
     return (
-        <div style={{ minHeight: '100vh', margin: '0px', padding: '0px' }}>
-            <Card>
-                <div style={{ display: 'flex', alignItems: 'center', padding: '1rem', position: 'relative' }}>
-                    <button
-                        onClick={handleClose}
-                        className="close-btn"
-                        aria-label="Close"
-                    >
-                        &times;
-                    </button>
-                    <Card.Img
-                        variant="left"
-                        src={user.telegramPhotoUrl}
-                        style={{ width: '150px', borderRadius: '50%' }}
-                    />
-                    <Card.Body>
-                        <Card.Title>
-                            {user.firstName} {user.lastName}
-                            {user.telegramUsername ? ` (@${user.telegramUsername})` : ''}
-                        </Card.Title>
-                    </Card.Body>
+        <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
+            <div style={{
+                background: '#fff',
+                padding: '1.5rem',
+                borderBottom: '1px solid #eee',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                position: 'relative'
+            }}>
+                <button
+                    onClick={() => history.push('/')}
+                    style={{
+                        position: 'absolute',
+                        top: '0.5rem',
+                        right: '0.5rem',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                        padding: '0.25rem 0.5rem',
+                        color: '#666',
+                        lineHeight: 1
+                    }}
+                >
+                    &times;
+                </button>
+                <img
+                    src={user.telegramPhotoUrl}
+                    alt=""
+                    style={{ width: '50px', height: '50px', borderRadius: '50%' }}
+                />
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: '600' }}>
+                        {user.firstName} {user.lastName}
+                    </div>
+                    {user.telegramUsername && (
+                        <div style={{ fontSize: '0.85rem', color: '#666' }}>@{user.telegramUsername}</div>
+                    )}
                 </div>
+            </div>
 
-                <ListGroup className="list-group-flush">
-                    <ListGroup horizontal>
-                        <ListGroupItem style={{ minWidth: '12em' }}>High score:</ListGroupItem>
-                        <ListGroupItem style={{ width: '100%' }}>{user.highScore}</ListGroupItem>
-                    </ListGroup>
-                    <ListGroup horizontal>
-                        <ListGroupItem style={{ minWidth: '12em' }}>Best time:</ListGroupItem>
-                        <ListGroupItem style={{ width: '100%' }}>{user.bestTime}s</ListGroupItem>
-                    </ListGroup>
-                    <ListGroup horizontal>
-                        <ListGroupItem style={{ minWidth: '12em' }}>Total games:</ListGroupItem>
-                        <ListGroupItem style={{ width: '100%' }}>{user.gamesTotal}</ListGroupItem>
-                    </ListGroup>
-                    <ListGroup horizontal>
-                        <ListGroupItem style={{ minWidth: '12em' }}>Time total:</ListGroupItem>
-                        <ListGroupItem style={{ width: '100%' }}>{formatTime(user.timeTotal)}</ListGroupItem>
-                    </ListGroup>
-                </ListGroup>
-            </Card>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '1px',
+                background: '#eee',
+                borderBottom: '1px solid #eee'
+            }}>
+                {[
+                    { label: 'High Score', value: user.highScore },
+                    { label: 'Best Time', value: `${user.bestTime}s` },
+                    { label: 'Games', value: user.gamesTotal },
+                    { label: 'Total Time', value: formatTime(user.timeTotal) }
+                ].map((stat, i) => (
+                    <div key={i} style={{
+                        background: '#fff',
+                        padding: '0.75rem',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>{stat.value}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#888', textTransform: 'uppercase' }}>{stat.label}</div>
+                    </div>
+                ))}
+            </div>
 
             <Tabs
                 id="profile-stats-tabs"
                 activeKey={key}
                 onSelect={(k) => setKey(k)}
-                className="mt-3"
+                className="mt-2"
+                style={{ paddingLeft: '1rem' }}
             >
                 <Tab eventKey="learn" title="Learn">
-                    <Alert variant="info" className="mt-3 mb-2">
-                        Practice these flags to improve your score! Focus on the ones you miss most often.
-                    </Alert>
-                    {renderStatsTable(learnData, "Great job! No flags need extra practice.")}
+                    <div style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', color: '#666' }}>
+                        Flags below 75% - practice these!
+                    </div>
+                    {renderStatsTable(learnData, "No flags need practice.")}
                 </Tab>
-                <Tab eventKey="stats" title="Stats">
-                    {renderStatsTable(allStats, "No guesses recorded yet. Start playing!")}
+                <Tab eventKey="stats" title="All Stats">
+                    {renderStatsTable(allStats, "No data yet.")}
                 </Tab>
             </Tabs>
         </div>

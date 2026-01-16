@@ -38,12 +38,13 @@ export const useOAuth = () => {
       if (refresh_token) {
         localStorage.setItem('refreshToken', refresh_token);
       }
-
-      // Store expiration time if provided
+console.log(expires_in, refresh_token, access_token);
+        // Store expiration time if provided
       if (expires_in) {
         const expiresAt = Date.now() + (expires_in);
         localStorage.setItem('tokenExpiresAt', expiresAt.toString());
       }
+
 
       // Set axios default header
       axios.defaults.headers.common = {

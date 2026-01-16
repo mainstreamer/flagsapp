@@ -2,6 +2,8 @@
 body {
     margin: 0!important;
     padding: 0!important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 /* Game wrapper and container */
@@ -37,13 +39,16 @@ h1 {
 }
 
 .flag {
-    font-size: 64px;
+    font-size: 74px;
     border: 3px dotted transparent;
     display: inline-block;
     cursor: pointer;
     transition: transform 0.2s ease, filter 0.3s;
     max-width: 100%;
     transform: scale(1);
+    /* iOS emoji fixes */
+    -webkit-font-smoothing: antialiased;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 
 .flags-container > span {
@@ -54,20 +59,60 @@ h1 {
     transform: scale(1.25) !important;
 }
 
+/* Mobile - use larger size to account for iOS rendering */
+@media (max-width: 520px) {
+    .flag {
+        font-size: 69px;
+    }
+}
+
 @media (max-width: 400px) {
     .flag {
-        font-size: 56px;
+        font-size: 62px;
     }
 }
 
 @media (max-width: 350px) {
     .flag {
-        font-size: 48px;
+        font-size: 53px;
+    }
+}
+
+/* iOS Safari specific - uses -webkit-touch-callout which is iOS only */
+@supports (-webkit-touch-callout: none) {
+    .flag {
+        font-size: 78px;
+    }
+
+    @media (max-width: 520px) {
+        .flag {
+            font-size: 74px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .flag {
+            font-size: 67px;
+        }
+    }
+
+    @media (max-width: 350px) {
+        .flag {
+            font-size: 58px;
+        }
     }
 }
 
 .flag:hover {
     transform: scale(1.25);
+}
+
+/* Disable magnification on mobile/touch devices */
+@media (max-width: 520px) {
+    .flag:hover,
+    .flags-container > span:hover .flag {
+        transform: scale(1) !important;
+    }
 }
 
 /* Don't show correct answer by default - showCorrect() will set border dynamically */

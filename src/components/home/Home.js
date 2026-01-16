@@ -256,7 +256,7 @@ const Home = () => {
                         <thead>
                             <tr>
                                 <th
-                                    colSpan="6"
+                                    colSpan="5"
                                     className={`text-center ${animPhase >= 4 ? 'anim-highscores-bounce' : 'anim-hidden'}`}
                                     style={{ fontSize: '1.5rem', padding: '1rem' }}
                                 >
@@ -264,21 +264,21 @@ const Home = () => {
                                 </th>
                             </tr>
                             <tr className={animPhase >= 4 ? 'anim-fade-in' : 'anim-hidden'}>
-                                <th className="text-center">Rank</th>
+                                <th className="text-center">#</th>
                                 <th>Player</th>
-                                <th className="text-center">Top Score</th>
-                                <th className="text-center">Best Time</th>
+                                <th className="text-center">Score</th>
+                                <th className="text-center">Time</th>
                                 <th className="text-center">Games</th>
-                                <th className="text-center">Time Total</th>
+                                {/* <th className="text-center">Total</th> */}
                             </tr>
                         </thead>
                         <tbody className={animPhase >= 3 ? '' : 'anim-hidden'}>
                             {leaderboard.map((player, index) => {
                                 const rank = index + 1;
                                 let medal = null;
-                                if (rank === 1) medal = <span role="img" aria-label="gold medal">🥇 </span>;
-                                else if (rank === 2) medal = <span role="img" aria-label="silver medal">🥈 </span>;
-                                else if (rank === 3) medal = <span role="img" aria-label="bronze medal">🥉 </span>;
+                                if (rank === 1) medal = <span role="img" aria-label="gold medal">🥇</span>;
+                                else if (rank === 2) medal = <span role="img" aria-label="silver medal">🥈</span>;
+                                else if (rank === 3) medal = <span role="img" aria-label="bronze medal">🥉</span>;
 
                                 const isRevealed = revealedRows.includes(index);
                                 const rowClass = animPhase >= 5
@@ -287,8 +287,8 @@ const Home = () => {
 
                                 return (
                                     <tr key={index} className={rowClass}>
-                                        <td className="text-center rank-cell">{medal}{rank}</td>
-                                        <td>{player.firstName}</td>
+                                        <td className="text-center rank-cell">{rank}</td>
+                                        <td>{medal}{player.firstName}</td>
                                         <td className="text-center score-cell">{player.highScore}</td>
                                         <td className="text-center time-cell">
                                             {(() => {
@@ -296,11 +296,11 @@ const Home = () => {
                                                 const minutes = Math.floor(totalSeconds / 60);
                                                 const seconds = totalSeconds % 60;
                                                 const pad = (n) => String(n).padStart(2, '0');
-                                                return `${pad(minutes)}:${pad(seconds)}`;
+                                                return `${pad(minutes)}m ${pad(seconds)}s`;
                                             })()}
                                         </td>
                                         <td className="text-center">{player.gamesTotal}</td>
-                                        <td className="text-center time-cell">
+                                        {/* <td className="text-center time-cell">
                                             {(() => {
                                                 const totalSeconds = player.timeTotal;
                                                 const hours = Math.floor(totalSeconds / 3600);
@@ -309,7 +309,7 @@ const Home = () => {
                                                 const pad = (n) => String(n).padStart(2, '0');
                                                 return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
                                             })()}
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 );
                             })}

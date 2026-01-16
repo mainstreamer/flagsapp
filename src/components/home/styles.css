@@ -131,7 +131,7 @@ body:has(.page-wrapper.animating) {
 .leaderboard-table .rank-cell {
   font-weight: 600;
   font-size: 1.1rem;
-  min-width: 80px;
+  min-width: 20px;
 }
 
 .leaderboard-table .score-cell {

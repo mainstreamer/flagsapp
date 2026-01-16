@@ -41,7 +41,7 @@ export const useOAuth = () => {
 
       // Store expiration time if provided
       if (expires_in) {
-        const expiresAt = Date.now() + (expires_in * 1000);
+        const expiresAt = Date.now() + (expires_in);
         localStorage.setItem('tokenExpiresAt', expiresAt.toString());
       }
 

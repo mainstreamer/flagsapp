@@ -30,25 +30,33 @@ class FlagsApi extends React.Component {
 
     async handleClick(action) {
         if (action === 'api') {
-            const res = await axios.get(api.url+'/api/flags/test');
-            this.props.dispatch(
-                {type : 'set', payload: 
-                    {   'text' : res.data.message, 
-                        'flags' : res.data.flags, 
-                        'ques' : res.data.ques, 
-                        'answer' : res.data.answer, 
-                        'answerCode' : res.data.answerCode, 
-                        'counter' : this.props.counter, 
-                        'lifes' : this.props.lifes, 
-                        'lifesIcon' : this.props.lifesIcon,
-                        'timer' : this.props.timer,
-                        'interval' : this.props.interval,
-                        'maxTimer' : this.props.maxTimer,
-                        'sessionTimer' : this.props.sessionTimer,
-                        'flagi' : res.data.flags,
+            try {
+                const res = await axios.get(api.url+'/api/flags/test');
+                this.props.dispatch(
+                    {type : 'set', payload:
+                        {   'text' : res.data.message,
+                            'flags' : res.data.flags,
+                            'ques' : res.data.ques,
+                            'answer' : res.data.answer,
+                            'answerCode' : res.data.answerCode,
+                            'counter' : this.props.counter,
+                            'lifes' : this.props.lifes,
+                            'lifesIcon' : this.props.lifesIcon,
+                            'timer' : this.props.timer,
+                            'interval' : this.props.interval,
+                            'maxTimer' : this.props.maxTimer,
+                            'sessionTimer' : this.props.sessionTimer,
+                            'flagi' : res.data.flags,
+                        }
                     }
+                );
+            } catch (err) {
+                if (err.response && err.response.status === 401) {
+                    this.handleUnauthorized();
+                    return;
                 }
-            );
+                throw err;
+            }
         }
 
         if (action === 'increment') {
@@ -56,8 +64,24 @@ class FlagsApi extends React.Component {
         }
 
         if (action === 'protected') {
-            const res = await axios.get(api.url+'/api/flags/protected');
+            try {
+                const res = await axios.get(api.url+'/api/flags/protected');
+            } catch (err) {
+                if (err.response && err.response.status === 401) {
+                    this.handleUnauthorized();
+                    return;
+                }
+                throw err;
+            }
         }
+    }
+
+    handleUnauthorized = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('tokenExpiresAt');
+        this.props.dispatch({type : 'reset'});
+        this.props.history.push('/');
     }
 
     async answer(action) {
@@ -74,12 +98,19 @@ class FlagsApi extends React.Component {
         
         if (action === this.props.answer) {
             this.stopTimer();
-            await axios.post(api.url+'/api/flags/correct/'+this.props.answerCode);
+            try {
+                await axios.post(api.url+'/api/flags/correct/'+this.props.answerCode);
+            } catch (err) {
+                if (err.response && err.response.status === 401) {
+                    this.handleUnauthorized();
+                    return;
+                }
+            }
             this.props.dispatch({type : 'correct' })
             setTimeout(() => {
                 this.showFlags();
             }, 1500);
-            
+
         } else {
             this.showCorrect();
             if (this.props.lifes == 1) {
@@ -225,10 +256,15 @@ class FlagsApi extends React.Component {
         }
     }
     
-    submitScore(score, sessionTimer) {
-            const res = axios.post(api.url+'/api/flags/scores', { 'score' : score, 'sessionTimer' : sessionTimer, 'answers' : this.answers });
+    async submitScore(score, sessionTimer) {
+        try {
+            await axios.post(api.url+'/api/flags/scores', { 'score' : score, 'sessionTimer' : sessionTimer, 'answers' : this.answers });
             this.answers = [];
-            console.log(res);
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                this.handleUnauthorized();
+            }
+        }
     }
 
     componentDidMount() {

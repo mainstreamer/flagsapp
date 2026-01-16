@@ -326,13 +326,17 @@ const Home = () => {
                             <span>Flags Quiz</span>
                             <span className="footer-divider">|</span>
                             <span className="footer-version">{process.env.REACT_APP_VERSION || 'dev'}</span>
-                        </div>
-                        <div className="footer-center">
-                            <span>Feedback: <a href="mailto:admin@izeebot.top">admin@izeebot.top</a></span>
-                        </div>
-                        <div className="footer-right">
+                            <span className="footer-divider">|</span>
+                            <span><a href="mailto:admin@izeebot.top">admin@izeebot.top</a></span>
+                            <span className="footer-divider">|</span>
                             <span>&copy; {new Date().getFullYear()}</span>
                         </div>
+                        {/*<div className="footer-right">*/}
+                        {/*    <span>Feedback: <a href="mailto:admin@izeebot.top">admin@izeebot.top</a></span>*/}
+                        {/*</div>*/}
+                        {/*<div className="footer-right">*/}
+                        {/*    */}
+                        {/*</div>*/}
                     </div>
                 </Container>
             </footer>
